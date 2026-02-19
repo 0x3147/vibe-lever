@@ -63,8 +63,23 @@ impl ToolService {
     }
 
     pub fn install(tool: &str, method: &str) -> Result<InstallResult, AppError> {
+        if tool == "claude-code" && method == "native" {
+            let output = if cfg!(windows) {
+                shell::run_command("powershell", &["-Command", "irm https://claude.ai/install.ps1 | iex"])?
+            } else {
+                shell::run_command("bash", &["-c", "curl -fsSL https://claude.ai/install.sh | bash"])?
+            };
+            return Ok(InstallResult {
+                success: output.success,
+                message: if output.success { "安装成功".to_string() } else { output.stderr.clone() },
+                output: Some(format!("{}
+{}", output.stdout, output.stderr)),
+            });
+        }
+
         let (cmd, args): (&str, Vec<&str>) = match (tool, method) {
             ("claude-code", "npm") => ("npm", vec!["install", "-g", "@anthropic-ai/claude-code"]),
+            ("claude-code", "brew") => ("brew", vec!["install", "claude"]),
             ("codex", "npm") => ("npm", vec!["install", "-g", "@openai/codex"]),
             _ => {
                 return Err(AppError::ShellCommand(format!(
@@ -82,7 +97,8 @@ impl ToolService {
             } else {
                 output.stderr.clone()
             },
-            output: Some(format!("{}\n{}", output.stdout, output.stderr)),
+            output: Some(format!("{}
+{}", output.stdout, output.stderr)),
         })
     }
 
