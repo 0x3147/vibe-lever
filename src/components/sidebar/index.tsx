@@ -62,7 +62,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="flex flex-col w-52 shrink-0 h-full bg-white/3 backdrop-blur-sm border-r border-white/8">
+    <div className="flex flex-col w-56 shrink-0 m-2 rounded-xl shadow-xl bg-sidebar backdrop-blur-md border border-border overflow-hidden">
       {/* Tool selector */}
       <div className="p-3">
         <Select value={currentTool} onValueChange={handleToolChange}>
@@ -89,8 +89,8 @@ export function Sidebar() {
               to={item.path as any}
               className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${
                 isActive
-                  ? "bg-accent text-accent-foreground font-medium"
-                  : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                  ? "bg-primary/15 text-primary font-medium"
+                  : "text-muted-foreground hover:bg-primary/8 hover:text-foreground"
               }`}
             >
               <FontAwesomeIcon icon={item.icon} className="w-3.5 h-3.5 shrink-0" />
@@ -109,8 +109,8 @@ export function Sidebar() {
           to={"/settings" as any}
           className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${
             currentPath === "/settings"
-              ? "bg-accent text-accent-foreground font-medium"
-              : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+              ? "bg-primary/15 text-primary font-medium"
+              : "text-muted-foreground hover:bg-primary/8 hover:text-foreground"
           }`}
         >
           <FontAwesomeIcon icon={faCog} className="w-3.5 h-3.5 shrink-0" />
