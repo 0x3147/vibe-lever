@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -47,6 +48,7 @@ export function Sidebar() {
   const routerState = useRouterState();
   const navigate = useNavigate();
   const currentPath = routerState.location.pathname;
+  const [collapsed, setCollapsed] = useState(false);
 
   const menus = TOOL_MENUS[currentTool];
 
@@ -62,21 +64,23 @@ export function Sidebar() {
   };
 
   return (
-    <div className="flex flex-col w-56 shrink-0 m-2 rounded-xl shadow-xl bg-sidebar backdrop-blur-md border border-border overflow-hidden">
+    <div className={`flex flex-col shrink-0 m-2 rounded-xl shadow-xl bg-sidebar backdrop-blur-md border border-border overflow-hidden transition-[width] duration-200 ${collapsed ? "w-14" : "w-56"}`}>
       {/* Tool selector */}
-      <div className="p-3">
-        <Select value={currentTool} onValueChange={handleToolChange}>
-          <SelectTrigger className="w-full h-8 text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="claude-code">Claude Code</SelectItem>
-            <SelectItem value="codex">Codex</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {!collapsed && (
+        <div className="p-3">
+          <Select value={currentTool} onValueChange={handleToolChange}>
+            <SelectTrigger className="w-full h-8 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="claude-code">Claude Code</SelectItem>
+              <SelectItem value="codex">Codex</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
-      <Separator />
+      {!collapsed && <Separator />}
 
       {/* Menu items */}
       <nav className="flex-1 p-2 space-y-0.5">
@@ -87,14 +91,14 @@ export function Sidebar() {
               key={item.key}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               to={item.path as any}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${
+              className={`flex items-center py-2 rounded-md text-sm transition-colors ${collapsed ? "justify-center px-0" : "gap-2.5 px-3"} ${
                 isActive
                   ? "bg-primary/15 text-primary font-medium"
                   : "text-muted-foreground hover:bg-primary/8 hover:text-foreground"
               }`}
             >
               <FontAwesomeIcon icon={item.icon} className="w-3.5 h-3.5 shrink-0" />
-              {t(item.label)}
+              {!collapsed && t(item.label)}
             </Link>
           );
         })}
@@ -107,20 +111,35 @@ export function Sidebar() {
         <Link
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           to={"/settings" as any}
-          className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${
+          className={`flex items-center py-2 rounded-md text-sm transition-colors ${collapsed ? "justify-center px-0" : "gap-2.5 px-3"} ${
             currentPath === "/settings"
               ? "bg-primary/15 text-primary font-medium"
               : "text-muted-foreground hover:bg-primary/8 hover:text-foreground"
           }`}
         >
           <FontAwesomeIcon icon={faCog} className="w-3.5 h-3.5 shrink-0" />
-          {t("sidebar.settings")}
+          {!collapsed && t("sidebar.settings")}
         </Link>
+        {!collapsed && (
+          <button
+            onClick={toggleLanguage}
+            className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
+          >
+            {language === "zh" ? "EN" : "中文"}
+          </button>
+        )}
         <button
-          onClick={toggleLanguage}
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
+          onClick={() => setCollapsed(!collapsed)}
+          className="w-full flex items-center justify-center py-1.5 rounded-md text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
+          aria-label={collapsed ? "展开" : "收起"}
         >
-          {language === "zh" ? "EN" : "中文"}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            {collapsed ? (
+              <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            ) : (
+              <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            )}
+          </svg>
         </button>
       </div>
     </div>
