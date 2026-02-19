@@ -1,1 +1,1 @@
-// Services module
+pub mod vendor_service;
