@@ -71,7 +71,7 @@
     --chart-3: #F59E0B;
     --chart-4: #8B5CF6;
     --chart-5: #EF4444;
-    --sidebar: rgba(255, 255, 255, 0.50);
+    --sidebar: rgba(255, 255, 255, 0.96);
     --sidebar-foreground: #0F172A;
     --sidebar-primary: #16A34A;
     --sidebar-primary-foreground: #FFFFFF;
@@ -105,7 +105,7 @@
     --chart-3: #FBBF24;
     --chart-4: #A78BFA;
     --chart-5: #F87171;
-    --sidebar: rgba(255, 255, 255, 0.03);
+    --sidebar: rgba(10, 22, 40, 0.96);
     --sidebar-foreground: #F1F5F9;
     --sidebar-primary: #06B6D4;
     --sidebar-primary-foreground: #0A1628;
