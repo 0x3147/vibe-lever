@@ -22,7 +22,14 @@ pub fn run() {
             app.manage(db);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![
+            commands::vendor::get_vendors,
+            commands::vendor::add_vendor,
+            commands::vendor::update_vendor,
+            commands::vendor::delete_vendor,
+            commands::vendor::activate_vendor,
+            commands::system::get_platform_info,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
