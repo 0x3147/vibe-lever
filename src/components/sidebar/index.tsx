@@ -62,7 +62,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="flex flex-col w-52 shrink-0 h-full bg-sidebar border-r border-border">
+    <div className="flex flex-col w-52 shrink-0 h-full bg-white/3 backdrop-blur-sm border-r border-white/8">
       {/* Tool selector */}
       <div className="p-3">
         <Select value={currentTool} onValueChange={handleToolChange}>

@@ -8,7 +8,7 @@ export function TitleBar() {
   return (
     <div
       data-tauri-drag-region
-      className="flex items-center justify-between h-9 bg-background border-b border-border px-4 select-none shrink-0"
+      className="flex items-center justify-between h-9 bg-white/5 backdrop-blur-sm border-b border-white/8 px-4 select-none shrink-0"
     >
       <div data-tauri-drag-region className="flex items-center gap-2 flex-1">
         <span className="text-sm font-semibold text-foreground">VibeLever</span>
