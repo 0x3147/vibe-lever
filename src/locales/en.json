@@ -1,0 +1,85 @@
+{
+  "common": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "activate": "Activate",
+    "active": "Active",
+    "inactive": "Inactive",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error",
+    "name": "Name",
+    "url": "URL",
+    "token": "Token",
+    "model": "Model",
+    "actions": "Actions"
+  },
+  "sidebar": {
+    "vendors": "Vendors",
+    "tools": "Tool Management",
+    "mcp": "MCP Servers",
+    "docs": "CLAUDE.md",
+    "settings": "Settings",
+    "selectTool": "Select Tool"
+  },
+  "vendors": {
+    "title": "Vendor Configuration",
+    "add": "Add Vendor",
+    "edit": "Edit Vendor",
+    "delete": "Delete Vendor",
+    "deleteConfirm": "Are you sure to delete this vendor?",
+    "preset": "Preset Vendors",
+    "custom": "Custom",
+    "baseUrl": "Base URL",
+    "vendorKey": "Vendor Key",
+    "configJson": "Extra Config (JSON)",
+    "activateSuccess": "Activated, config written",
+    "noVendors": "No vendors yet, click to add"
+  },
+  "tools": {
+    "title": "Tool Management",
+    "installed": "Installed",
+    "notInstalled": "Not Installed",
+    "running": "Running",
+    "stopped": "Stopped",
+    "version": "Version",
+    "path": "Path",
+    "install": "Install",
+    "uninstall": "Uninstall",
+    "kill": "Kill Process",
+    "installMethod": "Install Method",
+    "checkStatus": "Check Status"
+  },
+  "mcp": {
+    "title": "MCP Servers",
+    "add": "Add Server",
+    "delete": "Delete Server",
+    "deleteConfirm": "Are you sure to delete this MCP server?",
+    "serverType": "Type",
+    "command": "Command",
+    "args": "Arguments",
+    "noServers": "No MCP servers yet"
+  },
+  "docs": {
+    "title": "CLAUDE.md Editor",
+    "save": "Save File",
+    "filePath": "File Path",
+    "globalFile": "Global File (~/ CLAUDE.md)",
+    "saved": "Saved",
+    "notFound": "File not found, will be created on save"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "language": "Language",
+    "about": "About",
+    "version": "Version"
+  }
+}
