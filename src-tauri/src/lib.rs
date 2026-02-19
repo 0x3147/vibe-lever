@@ -23,12 +23,20 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            // vendor commands
             commands::vendor::get_vendors,
             commands::vendor::add_vendor,
             commands::vendor::update_vendor,
             commands::vendor::delete_vendor,
             commands::vendor::activate_vendor,
+            // system commands
             commands::system::get_platform_info,
+            // tool commands
+            commands::tool::check_tool_status,
+            commands::tool::install_tool,
+            commands::tool::uninstall_tool,
+            commands::tool::check_tool_running,
+            commands::tool::kill_tool_process,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
