@@ -20,7 +20,7 @@
   },
   "sidebar": {
     "vendors": "供应商配置",
-    "tools": "工具管理",
+    "tools": "安装管理",
     "mcp": "MCP 服务器",
     "docs": "CLAUDE.md",
     "settings": "设置",
@@ -41,7 +41,7 @@
     "noVendors": "暂无供应商，点击添加"
   },
   "tools": {
-    "title": "工具管理",
+    "title": "安装管理",
     "installed": "已安装",
     "notInstalled": "未安装",
     "running": "运行中",
@@ -52,7 +52,18 @@
     "uninstall": "卸载",
     "kill": "终止进程",
     "installMethod": "安装方式",
-    "checkStatus": "检查状态"
+    "checkStatus": "检查状态",
+    "methodNpm": "npm 全局安装",
+    "methodNative": "官方脚本安装",
+    "methodBrew": "Homebrew 安装",
+    "nodeSection": "Node.js 环境",
+    "nodeInstalled": "Node.js 已安装",
+    "nodeNotInstalled": "Node.js 未安装",
+    "nvmInstalled": "NVM 已安装",
+    "nvmNotInstalled": "NVM 未安装",
+    "installNvm": "安装 NVM",
+    "installNode": "安装 Node.js LTS",
+    "nodeVersion": "Node 版本"
   },
   "mcp": {
     "title": "MCP 服务器",

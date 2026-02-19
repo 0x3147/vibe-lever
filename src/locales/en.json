@@ -20,7 +20,7 @@
   },
   "sidebar": {
     "vendors": "Vendors",
-    "tools": "Tool Management",
+    "tools": "Install Management",
     "mcp": "MCP Servers",
     "docs": "CLAUDE.md",
     "settings": "Settings",
@@ -41,7 +41,7 @@
     "noVendors": "No vendors yet, click to add"
   },
   "tools": {
-    "title": "Tool Management",
+    "title": "Install Management",
     "installed": "Installed",
     "notInstalled": "Not Installed",
     "running": "Running",
@@ -52,7 +52,18 @@
     "uninstall": "Uninstall",
     "kill": "Kill Process",
     "installMethod": "Install Method",
-    "checkStatus": "Check Status"
+    "checkStatus": "Check Status",
+    "methodNpm": "npm Global Install",
+    "methodNative": "Official Script Install",
+    "methodBrew": "Homebrew Install",
+    "nodeSection": "Node.js Environment",
+    "nodeInstalled": "Node.js Installed",
+    "nodeNotInstalled": "Node.js Not Installed",
+    "nvmInstalled": "NVM Installed",
+    "nvmNotInstalled": "NVM Not Installed",
+    "installNvm": "Install NVM",
+    "installNode": "Install Node.js LTS",
+    "nodeVersion": "Node Version"
   },
   "mcp": {
     "title": "MCP Servers",
