@@ -9,11 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClaudeCodeMcpRouteImport } from './routes/claude-code/mcp'
+import { Route as ClaudeCodeDocsRouteImport } from './routes/claude-code/docs'
 import { Route as ToolVendorsRouteImport } from './routes/$tool/vendors'
 import { Route as ToolToolsRouteImport } from './routes/$tool/tools'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -22,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const ClaudeCodeMcpRoute = ClaudeCodeMcpRouteImport.update({
   id: '/claude-code/mcp',
   path: '/claude-code/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClaudeCodeDocsRoute = ClaudeCodeDocsRouteImport.update({
+  id: '/claude-code/docs',
+  path: '/claude-code/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolVendorsRoute = ToolVendorsRouteImport.update({
@@ -37,40 +49,74 @@ const ToolToolsRoute = ToolToolsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/$tool/tools': typeof ToolToolsRoute
   '/$tool/vendors': typeof ToolVendorsRoute
+  '/claude-code/docs': typeof ClaudeCodeDocsRoute
   '/claude-code/mcp': typeof ClaudeCodeMcpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/$tool/tools': typeof ToolToolsRoute
   '/$tool/vendors': typeof ToolVendorsRoute
+  '/claude-code/docs': typeof ClaudeCodeDocsRoute
   '/claude-code/mcp': typeof ClaudeCodeMcpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/$tool/tools': typeof ToolToolsRoute
   '/$tool/vendors': typeof ToolVendorsRoute
+  '/claude-code/docs': typeof ClaudeCodeDocsRoute
   '/claude-code/mcp': typeof ClaudeCodeMcpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$tool/tools' | '/$tool/vendors' | '/claude-code/mcp'
+  fullPaths:
+    | '/'
+    | '/settings'
+    | '/$tool/tools'
+    | '/$tool/vendors'
+    | '/claude-code/docs'
+    | '/claude-code/mcp'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$tool/tools' | '/$tool/vendors' | '/claude-code/mcp'
-  id: '__root__' | '/' | '/$tool/tools' | '/$tool/vendors' | '/claude-code/mcp'
+  to:
+    | '/'
+    | '/settings'
+    | '/$tool/tools'
+    | '/$tool/vendors'
+    | '/claude-code/docs'
+    | '/claude-code/mcp'
+  id:
+    | '__root__'
+    | '/'
+    | '/settings'
+    | '/$tool/tools'
+    | '/$tool/vendors'
+    | '/claude-code/docs'
+    | '/claude-code/mcp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SettingsRoute: typeof SettingsRoute
   ToolToolsRoute: typeof ToolToolsRoute
   ToolVendorsRoute: typeof ToolVendorsRoute
+  ClaudeCodeDocsRoute: typeof ClaudeCodeDocsRoute
   ClaudeCodeMcpRoute: typeof ClaudeCodeMcpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -83,6 +129,13 @@ declare module '@tanstack/react-router' {
       path: '/claude-code/mcp'
       fullPath: '/claude-code/mcp'
       preLoaderRoute: typeof ClaudeCodeMcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/claude-code/docs': {
+      id: '/claude-code/docs'
+      path: '/claude-code/docs'
+      fullPath: '/claude-code/docs'
+      preLoaderRoute: typeof ClaudeCodeDocsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$tool/vendors': {
@@ -104,8 +157,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SettingsRoute: SettingsRoute,
   ToolToolsRoute: ToolToolsRoute,
   ToolVendorsRoute: ToolVendorsRoute,
+  ClaudeCodeDocsRoute: ClaudeCodeDocsRoute,
   ClaudeCodeMcpRoute: ClaudeCodeMcpRoute,
 }
 export const routeTree = rootRouteImport
