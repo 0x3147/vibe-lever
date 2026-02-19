@@ -77,19 +77,20 @@ impl ToolService {
             });
         }
 
-        let (cmd, args): (&str, Vec<&str>) = match (tool, method) {
-            ("claude-code", "npm") => ("npm", vec!["install", "-g", "@anthropic-ai/claude-code"]),
-            ("claude-code", "brew") => ("brew", vec!["install", "claude"]),
-            ("codex", "npm") => ("npm", vec!["install", "-g", "@openai/codex"]),
-            _ => {
-                return Err(AppError::ShellCommand(format!(
-                    "Unsupported install: {} via {}",
-                    tool, method
-                )))
-            }
+        let npm_pkg = match tool {
+            "claude-code" => Some("@anthropic-ai/claude-code"),
+            "codex" => Some("@openai/codex"),
+            _ => None,
         };
 
-        let output = shell::run_command(cmd, &args)?;
+        let output = match (tool, method) {
+            (_, "npm") => {
+                let pkg = npm_pkg.ok_or_else(|| AppError::ShellCommand(format!("Unknown tool: {}", tool)))?;
+                shell::run_npm(&["install", "-g", pkg])?
+            }
+            ("claude-code", "brew") => shell::run_command("brew", &["install", "claude"])?,
+            _ => return Err(AppError::ShellCommand(format!("Unsupported install: {} via {}", tool, method))),
+        };
         Ok(InstallResult {
             success: output.success,
             message: if output.success {
@@ -103,13 +104,13 @@ impl ToolService {
     }
 
     pub fn uninstall(tool: &str) -> Result<(), AppError> {
-        let (cmd, args): (&str, Vec<&str>) = match tool {
-            "claude-code" => ("npm", vec!["uninstall", "-g", "@anthropic-ai/claude-code"]),
-            "codex" => ("npm", vec!["uninstall", "-g", "@openai/codex"]),
+        let args: &[&str] = match tool {
+            "claude-code" => &["uninstall", "-g", "@anthropic-ai/claude-code"],
+            "codex" => &["uninstall", "-g", "@openai/codex"],
             _ => return Err(AppError::ShellCommand(format!("Unknown tool: {}", tool))),
         };
 
-        let output = shell::run_command(cmd, &args)?;
+        let output = shell::run_npm(args)?;
         if !output.success {
             return Err(AppError::ShellCommand(output.stderr));
         }

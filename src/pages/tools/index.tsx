@@ -25,6 +25,7 @@ export function ToolsPage({ tool }: Props) {
   const [method, setMethod] = useState("npm");
   const [loading, setLoading] = useState(false);
   const [platform, setPlatform] = useState("");
+  const [opError, setOpError] = useState<string | null>(null);
 
   useEffect(() => {
     invoke<{ platform: string }>("get_platform_info").then(p => setPlatform(p.platform));
@@ -47,7 +48,8 @@ export function ToolsPage({ tool }: Props) {
 
   const withRefresh = (fn: () => Promise<unknown>) => async () => {
     setLoading(true);
-    try { await fn(); } catch (e) { console.error(e); }
+    setOpError(null);
+    try { await fn(); } catch (e) { setOpError(String(e)); }
     await refresh();
   };
 
@@ -83,6 +85,8 @@ export function ToolsPage({ tool }: Props) {
           ))}
         </div>
       </div>
+
+      {opError && <p className="text-xs text-destructive">{opError}</p>}
 
       <ToolStatusCard
         toolId={tool}

@@ -20,6 +20,17 @@ pub fn run_command(cmd: &str, args: &[&str]) -> Result<ShellOutput, AppError> {
     })
 }
 
+/// Windows 上 npm 是 npm.cmd，Command::new("npm") 找不到它，需要通过 cmd /c 调用
+pub fn run_npm(args: &[&str]) -> Result<ShellOutput, AppError> {
+    if cfg!(windows) {
+        let mut cmd_args = vec!["/c", "npm"];
+        cmd_args.extend_from_slice(args);
+        run_command("cmd", &cmd_args)
+    } else {
+        run_command("npm", args)
+    }
+}
+
 /// 检查某个命令是否存在于 PATH 中
 pub fn which(cmd: &str) -> Option<String> {
     let check_cmd = if cfg!(windows) { "where" } else { "which" };
