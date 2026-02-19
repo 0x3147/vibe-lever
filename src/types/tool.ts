@@ -19,3 +19,10 @@ export interface PlatformInfo {
 }
 
 export type ToolId = "claude-code" | "codex";
+
+export interface NodeStatus {
+  node_installed: boolean;
+  node_version: string | null;
+  nvm_installed: boolean;
+  nvm_version: string | null;
+}
