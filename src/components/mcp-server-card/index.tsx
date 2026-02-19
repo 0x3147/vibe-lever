@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +10,6 @@ interface Props {
 }
 
 export function McpServerCard({ server, onDelete }: Props) {
-  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-card">
       <div className="min-w-0">

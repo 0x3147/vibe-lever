@@ -16,7 +16,7 @@ interface SettingsStore {
 
 export const useSettingsStore = create<SettingsStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       theme: "light",
       language: "zh",
       lastTool: "claude-code",

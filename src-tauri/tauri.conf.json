@@ -12,9 +12,12 @@
   "app": {
     "windows": [
       {
-        "title": "vibe-lever",
-        "width": 800,
-        "height": 600
+        "title": "VibeLever",
+        "width": 1100,
+        "height": 750,
+        "minWidth": 900,
+        "minHeight": 600,
+        "decorations": false
       }
     ],
     "security": {
