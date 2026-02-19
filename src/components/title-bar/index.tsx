@@ -1,6 +1,4 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faSquare, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export function TitleBar() {
   const appWindow = getCurrentWindow();
@@ -8,32 +6,43 @@ export function TitleBar() {
   return (
     <div
       data-tauri-drag-region
-      className="flex items-center justify-between h-9 bg-white/5 backdrop-blur-sm border-b border-white/8 px-4 select-none shrink-0"
+      className="flex items-center justify-between h-10 px-3 select-none shrink-0 border-b border-border/50"
     >
-      <div data-tauri-drag-region className="flex items-center gap-2 flex-1">
-        <span className="text-sm font-semibold text-foreground">VibeLever</span>
+      <div data-tauri-drag-region className="flex items-center gap-2">
+        <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center shrink-0">
+          <span className="text-primary text-[10px] font-bold leading-none">V</span>
+        </div>
+        <span className="text-sm font-semibold text-foreground/80 tracking-tight">VibeLever</span>
       </div>
-      <div className="flex items-center">
+
+      <div className="flex items-center gap-0.5">
         <button
           onClick={() => appWindow.minimize()}
-          className="h-9 w-11 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          className="w-10 h-7 flex items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
           aria-label="最小化"
         >
-          <FontAwesomeIcon icon={faMinus} className="text-xs" />
+          <svg width="11" height="2" viewBox="0 0 11 2" fill="none">
+            <line x1="0.5" y1="1" x2="10.5" y2="1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
         </button>
         <button
           onClick={() => appWindow.toggleMaximize()}
-          className="h-9 w-11 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          className="w-10 h-7 flex items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
           aria-label="最大化"
         >
-          <FontAwesomeIcon icon={faSquare} className="text-xs" />
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+            <rect x="1" y="1" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
         </button>
         <button
           onClick={() => appWindow.close()}
-          className="h-9 w-11 flex items-center justify-center text-muted-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors"
+          className="w-10 h-7 flex items-center justify-center rounded-md text-muted-foreground hover:bg-red-500 hover:text-white transition-colors"
           aria-label="关闭"
         >
-          <FontAwesomeIcon icon={faXmark} className="text-sm" />
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+            <line x1="1.5" y1="1.5" x2="9.5" y2="9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="9.5" y1="1.5" x2="1.5" y2="9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
         </button>
       </div>
     </div>
