@@ -5,7 +5,11 @@ use crate::utils::shell;
 pub struct ToolService;
 
 impl ToolService {
-    pub fn check_status(tool: &str) -> Result<ToolStatus, AppError> {
+    pub fn check_status(tool: &str, db: &crate::db::Database) -> Result<ToolStatus, AppError> {
+        use crate::services::tool_cache_service::ToolCacheService;
+        if let Some(cached) = ToolCacheService::get(db, tool) {
+            return Ok(cached);
+        }
         let cmd = match tool {
             "claude-code" => "claude",
             "codex" => "codex",
@@ -34,13 +38,15 @@ impl ToolService {
 
         let running = Self::check_running(tool).unwrap_or(false);
 
-        Ok(ToolStatus {
+        let status = ToolStatus {
             installed,
             path,
             version,
             install_method: None,
             running,
-        })
+        };
+        ToolCacheService::set(db, tool, &status);
+        Ok(status)
     }
 
     pub fn check_running(tool: &str) -> Result<bool, AppError> {

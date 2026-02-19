@@ -3,18 +3,40 @@ use crate::models::tool::{InstallResult, ToolStatus};
 use crate::services::tool_service::ToolService;
 
 #[tauri::command]
-pub async fn check_tool_status(tool: String) -> Result<ToolStatus, AppError> {
-    ToolService::check_status(&tool)
+pub async fn check_tool_status(
+    tool: String,
+    db: tauri::State<'_, crate::db::Database>,
+) -> Result<ToolStatus, AppError> {
+    ToolService::check_status(&tool, &db)
 }
 
 #[tauri::command]
-pub async fn install_tool(tool: String, method: String) -> Result<InstallResult, AppError> {
-    ToolService::install(&tool, &method)
+pub async fn install_tool(
+    tool: String,
+    method: String,
+    db: tauri::State<'_, crate::db::Database>,
+) -> Result<InstallResult, AppError> {
+    let result = ToolService::install(&tool, &method)?;
+    if result.success {
+        if let Ok(s) = ToolService::check_status(&tool, &db) {
+            let _ = s;
+        }
+    }
+    Ok(result)
 }
 
 #[tauri::command]
-pub async fn uninstall_tool(tool: String) -> Result<(), AppError> {
-    ToolService::uninstall(&tool)
+pub async fn uninstall_tool(
+    tool: String,
+    db: tauri::State<'_, crate::db::Database>,
+) -> Result<(), AppError> {
+    ToolService::uninstall(&tool)?;
+    use crate::services::tool_cache_service::ToolCacheService;
+    ToolCacheService::set(&db, &tool, &ToolStatus {
+        installed: false, version: None, path: None,
+        install_method: None, running: false,
+    });
+    Ok(())
 }
 
 #[tauri::command]
