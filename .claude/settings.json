@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm dlx:*)",
+      "Bash(pnpm exec vite build:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\radeo\\Desktop\\vibe-lever\\src\\routes"
+    ]
+  }
+}
