@@ -37,6 +37,16 @@ pub fn run() {
             commands::tool::uninstall_tool,
             commands::tool::check_tool_running,
             commands::tool::kill_tool_process,
+            // mcp commands
+            commands::mcp::get_mcp_servers,
+            commands::mcp::add_mcp_server,
+            commands::mcp::delete_mcp_server,
+            // docs commands
+            commands::docs::get_claude_md,
+            commands::docs::save_claude_md,
+            // settings commands
+            commands::settings::get_settings,
+            commands::settings::update_setting,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
