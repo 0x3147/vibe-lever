@@ -63,7 +63,16 @@
     "nvmNotInstalled": "NVM 未安装",
     "installNvm": "安装 NVM",
     "installNode": "安装 Node.js LTS",
-    "nodeVersion": "Node 版本"
+    "nodeVersion": "Node 版本",
+    "wizardStep1": "选择方式",
+    "wizardStep2": "安装中",
+    "wizardStep3": "完成",
+    "wizardSelectMethod": "选择安装方式",
+    "wizardInstalling": "正在安装，请稍候...",
+    "wizardSuccess": "安装成功",
+    "wizardFailed": "安装失败",
+    "wizardRetry": "重试",
+    "wizardViewInstalled": "查看已安装"
   },
   "mcp": {
     "title": "MCP 服务器",

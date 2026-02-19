@@ -63,7 +63,16 @@
     "nvmNotInstalled": "NVM Not Installed",
     "installNvm": "Install NVM",
     "installNode": "Install Node.js LTS",
-    "nodeVersion": "Node Version"
+    "nodeVersion": "Node Version",
+    "wizardStep1": "Select Method",
+    "wizardStep2": "Installing",
+    "wizardStep3": "Done",
+    "wizardSelectMethod": "Choose installation method",
+    "wizardInstalling": "Installing, please wait...",
+    "wizardSuccess": "Installation successful",
+    "wizardFailed": "Installation failed",
+    "wizardRetry": "Retry",
+    "wizardViewInstalled": "View installed"
   },
   "mcp": {
     "title": "MCP Servers",
