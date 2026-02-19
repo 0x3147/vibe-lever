@@ -21,6 +21,14 @@ pub fn create_tables(conn: &Connection) -> Result<(), rusqlite::Error> {
             key   TEXT PRIMARY KEY,
             value TEXT NOT NULL
         );
+
+        CREATE TABLE IF NOT EXISTS tool_cache (
+            tool        TEXT PRIMARY KEY,
+            installed   INTEGER NOT NULL DEFAULT 0,
+            version     TEXT,
+            path        TEXT,
+            checked_at  TEXT DEFAULT (datetime('now'))
+        );
         ",
     )?;
     Ok(())
