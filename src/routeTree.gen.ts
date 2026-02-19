@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ClaudeCodeMcpRouteImport } from './routes/claude-code/mcp'
 import { Route as ToolVendorsRouteImport } from './routes/$tool/vendors'
 import { Route as ToolToolsRouteImport } from './routes/$tool/tools'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClaudeCodeMcpRoute = ClaudeCodeMcpRouteImport.update({
+  id: '/claude-code/mcp',
+  path: '/claude-code/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolVendorsRoute = ToolVendorsRouteImport.update({
@@ -33,30 +39,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$tool/tools': typeof ToolToolsRoute
   '/$tool/vendors': typeof ToolVendorsRoute
+  '/claude-code/mcp': typeof ClaudeCodeMcpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$tool/tools': typeof ToolToolsRoute
   '/$tool/vendors': typeof ToolVendorsRoute
+  '/claude-code/mcp': typeof ClaudeCodeMcpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$tool/tools': typeof ToolToolsRoute
   '/$tool/vendors': typeof ToolVendorsRoute
+  '/claude-code/mcp': typeof ClaudeCodeMcpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$tool/tools' | '/$tool/vendors'
+  fullPaths: '/' | '/$tool/tools' | '/$tool/vendors' | '/claude-code/mcp'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$tool/tools' | '/$tool/vendors'
-  id: '__root__' | '/' | '/$tool/tools' | '/$tool/vendors'
+  to: '/' | '/$tool/tools' | '/$tool/vendors' | '/claude-code/mcp'
+  id: '__root__' | '/' | '/$tool/tools' | '/$tool/vendors' | '/claude-code/mcp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ToolToolsRoute: typeof ToolToolsRoute
   ToolVendorsRoute: typeof ToolVendorsRoute
+  ClaudeCodeMcpRoute: typeof ClaudeCodeMcpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/claude-code/mcp': {
+      id: '/claude-code/mcp'
+      path: '/claude-code/mcp'
+      fullPath: '/claude-code/mcp'
+      preLoaderRoute: typeof ClaudeCodeMcpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$tool/vendors': {
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ToolToolsRoute: ToolToolsRoute,
   ToolVendorsRoute: ToolVendorsRoute,
+  ClaudeCodeMcpRoute: ClaudeCodeMcpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
