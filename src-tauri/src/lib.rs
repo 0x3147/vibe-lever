@@ -52,6 +52,7 @@ pub fn run() {
             commands::tool::check_node_status,
             commands::tool::install_nvm,
             commands::tool::install_node_lts,
+            commands::tool::install_tool_streaming,
             // mcp commands
             commands::mcp::get_mcp_servers,
             commands::mcp::add_mcp_server,
