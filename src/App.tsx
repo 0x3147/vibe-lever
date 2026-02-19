@@ -1,9 +1,14 @@
-function App() {
-  return (
-    <div className="min-h-screen bg-background text-foreground">
-      <h1 className="text-2xl font-bold p-4">VibeLever</h1>
-    </div>
-  );
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+const router = createRouter({ routeTree });
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-export default App;
+export default function App() {
+  return <RouterProvider router={router} />;
+}
