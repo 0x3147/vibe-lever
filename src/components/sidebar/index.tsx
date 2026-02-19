@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStore,
@@ -45,12 +45,16 @@ export function Sidebar() {
   const { currentTool, setCurrentTool } = useToolStore();
   const { setLanguage, language } = useSettingsStore();
   const routerState = useRouterState();
+  const navigate = useNavigate();
   const currentPath = routerState.location.pathname;
 
   const menus = TOOL_MENUS[currentTool];
 
   const handleToolChange = (tool: string) => {
-    setCurrentTool(tool as ToolId);
+    const id = tool as ToolId;
+    setCurrentTool(id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    navigate({ to: TOOL_MENUS[id][0].path as any });
   };
 
   const toggleLanguage = () => {

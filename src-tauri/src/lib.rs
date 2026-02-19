@@ -6,6 +6,7 @@ mod services;
 mod utils;
 
 use db::Database;
+use services::vendor_service::VendorService;
 use tauri::Manager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -19,6 +20,17 @@ pub fn run() {
                 .app_data_dir()
                 .expect("failed to get app data dir");
             let db = Database::new(app_dir).expect("failed to initialize database");
+            // 若 claude-code 供应商列表为空，从 ~/.claude/settings.json 自动导入
+            if VendorService::get_all(&db, "claude-code")
+                .unwrap_or_default()
+                .is_empty()
+            {
+                if let Ok(Some(input)) = utils::config_parser::read_claude_settings() {
+                    if let Ok(vendor) = VendorService::add(&db, "claude-code", input) {
+                        let _ = VendorService::activate(&db, "claude-code", vendor.id);
+                    }
+                }
+            }
             app.manage(db);
             Ok(())
         })

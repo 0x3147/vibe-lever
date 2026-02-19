@@ -11,7 +11,7 @@ impl DocsService {
                 std::io::ErrorKind::NotFound,
                 "Home directory not found",
             )))?;
-            home.join("CLAUDE.md")
+            home.join(".claude").join("CLAUDE.md")
         };
 
         if file_path.exists() {
@@ -29,7 +29,7 @@ impl DocsService {
                 std::io::ErrorKind::NotFound,
                 "Home directory not found",
             )))?;
-            home.join("CLAUDE.md")
+            home.join(".claude").join("CLAUDE.md")
         };
 
         std::fs::write(&file_path, content)?;

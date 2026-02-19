@@ -1,5 +1,5 @@
 use crate::errors::AppError;
-use crate::models::vendor::Vendor;
+use crate::models::vendor::{Vendor, VendorInput};
 
 /// 将 Vendor 配置写入 Claude Code 的 settings.json
 pub fn write_claude_settings(vendor: &Vendor) -> Result<(), AppError> {
@@ -120,4 +120,39 @@ wire_api = "openai"
 
     std::fs::write(codex_dir.join("config.toml"), config_toml)?;
     Ok(())
+}
+
+/// 从 ~/.claude/settings.json 读取当前激活的供应商配置
+pub fn read_claude_settings() -> Result<Option<VendorInput>, AppError> {
+    let home = dirs::home_dir().ok_or(AppError::FileSystem(std::io::Error::new(
+        std::io::ErrorKind::NotFound,
+        "Home directory not found",
+    )))?;
+    let settings_path = home.join(".claude").join("settings.json");
+    if !settings_path.exists() {
+        return Ok(None);
+    }
+    let content = std::fs::read_to_string(&settings_path)?;
+    let settings: serde_json::Value = serde_json::from_str(&content).unwrap_or_default();
+    let token = settings["env"]["ANTHROPIC_AUTH_TOKEN"]
+        .as_str()
+        .unwrap_or("")
+        .to_string();
+    let base_url = settings["env"]["ANTHROPIC_BASE_URL"]
+        .as_str()
+        .unwrap_or("")
+        .to_string();
+    if token.is_empty() && base_url.is_empty() {
+        return Ok(None);
+    }
+    Ok(Some(VendorInput {
+        name: "导入的配置".to_string(),
+        vendor_key: None,
+        base_url,
+        token,
+        model: settings["env"]["ANTHROPIC_MODEL"]
+            .as_str()
+            .map(|s| s.to_string()),
+        config_json: None,
+    }))
 }
