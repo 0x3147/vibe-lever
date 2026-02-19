@@ -82,37 +82,37 @@
 }
 
 .dark {
-    --background: #0F172A;
+    --background: transparent;
     --foreground: #F1F5F9;
-    --card: #1E293B;
+    --card: rgba(255, 255, 255, 0.05);
     --card-foreground: #F1F5F9;
-    --popover: #1E293B;
+    --popover: rgba(10, 22, 40, 0.92);
     --popover-foreground: #F1F5F9;
-    --primary: #22C55E;
-    --primary-foreground: #0F172A;
-    --secondary: #334155;
+    --primary: #06B6D4;
+    --primary-foreground: #0A1628;
+    --secondary: rgba(255, 255, 255, 0.08);
     --secondary-foreground: #F1F5F9;
-    --muted: #1E293B;
+    --muted: rgba(255, 255, 255, 0.05);
     --muted-foreground: #94A3B8;
-    --accent: #334155;
+    --accent: rgba(255, 255, 255, 0.08);
     --accent-foreground: #F1F5F9;
     --destructive: #F87171;
-    --border: rgba(148, 163, 184, 0.12);
-    --input: rgba(148, 163, 184, 0.12);
-    --ring: #22C55E;
-    --chart-1: #22C55E;
+    --border: rgba(255, 255, 255, 0.08);
+    --input: rgba(255, 255, 255, 0.08);
+    --ring: #06B6D4;
+    --chart-1: #06B6D4;
     --chart-2: #60A5FA;
     --chart-3: #FBBF24;
     --chart-4: #A78BFA;
     --chart-5: #F87171;
-    --sidebar: #1E293B;
+    --sidebar: rgba(255, 255, 255, 0.03);
     --sidebar-foreground: #F1F5F9;
-    --sidebar-primary: #22C55E;
-    --sidebar-primary-foreground: #0F172A;
-    --sidebar-accent: #334155;
+    --sidebar-primary: #06B6D4;
+    --sidebar-primary-foreground: #0A1628;
+    --sidebar-accent: rgba(255, 255, 255, 0.08);
     --sidebar-accent-foreground: #F1F5F9;
-    --sidebar-border: rgba(148, 163, 184, 0.08);
-    --sidebar-ring: #22C55E;
+    --sidebar-border: rgba(255, 255, 255, 0.06);
+    --sidebar-ring: #06B6D4;
 }
 
 @layer base {
@@ -122,5 +122,12 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  }
+  .dark body {
+    background:
+      radial-gradient(ellipse at 80% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 10% 90%, rgba(71, 85, 105, 0.08) 0%, transparent 50%),
+      linear-gradient(135deg, #0A1628 0%, #0D2B2B 50%, #0A1A1A 100%);
+    background-attachment: fixed;
   }
 }
