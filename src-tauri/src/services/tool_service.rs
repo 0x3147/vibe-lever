@@ -147,8 +147,8 @@ impl NodeService {
             .and_then(|o| if o.success { Some(o.stdout.trim().to_string()) } else { None });
 
         let nvm_version = if cfg!(windows) {
-            shell::run_command("nvm", &["version"]).ok()
-                .and_then(|o| if o.success { Some(o.stdout.trim().to_string()) } else { None })
+            // nvm-windows shows a GUI dialog when run outside a terminal; use which instead
+            shell::which("nvm").map(|_| String::new())
         } else {
             shell::run_command("bash", &["-c", "source ~/.nvm/nvm.sh && nvm --version"]).ok()
                 .and_then(|o| if o.success { Some(o.stdout.trim().to_string()) } else { None })

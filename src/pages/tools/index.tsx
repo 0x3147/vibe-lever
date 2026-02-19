@@ -45,35 +45,17 @@ export function ToolsPage({ tool }: Props) {
 
   useEffect(() => { refresh(); }, [tool]);
 
-  const handleInstall = async () => {
+  const withRefresh = (fn: () => Promise<unknown>) => async () => {
     setLoading(true);
-    try { await invoke("install_tool", { tool, method }); await refresh(); }
-    finally { setLoading(false); }
+    try { await fn(); } catch (e) { console.error(e); }
+    await refresh();
   };
 
-  const handleUninstall = async () => {
-    setLoading(true);
-    try { await invoke("uninstall_tool", { tool }); await refresh(); }
-    finally { setLoading(false); }
-  };
-
-  const handleKill = async () => {
-    setLoading(true);
-    try { await invoke("kill_tool_process", { tool }); await refresh(); }
-    finally { setLoading(false); }
-  };
-
-  const handleInstallNvm = async () => {
-    setLoading(true);
-    try { await invoke("install_nvm"); await refresh(); }
-    finally { setLoading(false); }
-  };
-
-  const handleInstallNode = async () => {
-    setLoading(true);
-    try { await invoke("install_node_lts"); await refresh(); }
-    finally { setLoading(false); }
-  };
+  const handleInstall = withRefresh(() => invoke("install_tool", { tool, method }));
+  const handleUninstall = withRefresh(() => invoke("uninstall_tool", { tool }));
+  const handleKill = withRefresh(() => invoke("kill_tool_process", { tool }));
+  const handleInstallNvm = withRefresh(() => invoke("install_nvm"));
+  const handleInstallNode = withRefresh(() => invoke("install_node_lts"));
 
   const availableMethods = (INSTALL_METHODS[tool] ?? []).filter(
     m => !m.platforms || m.platforms.includes(platform)
