@@ -26,3 +26,21 @@ pub async fn check_tool_running(tool: String) -> Result<bool, AppError> {
 pub async fn kill_tool_process(tool: String) -> Result<(), AppError> {
     ToolService::kill_process(&tool)
 }
+
+use crate::services::tool_service::NodeService;
+use crate::models::tool::NodeStatus;
+
+#[tauri::command]
+pub async fn check_node_status() -> NodeStatus {
+    NodeService::check_status()
+}
+
+#[tauri::command]
+pub async fn install_nvm() -> Result<InstallResult, AppError> {
+    NodeService::install_nvm()
+}
+
+#[tauri::command]
+pub async fn install_node_lts() -> Result<InstallResult, AppError> {
+    NodeService::install_node_lts()
+}

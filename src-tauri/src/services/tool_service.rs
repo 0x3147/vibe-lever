@@ -135,3 +135,56 @@ impl ToolService {
         Ok(())
     }
 }
+
+use crate::models::tool::NodeStatus;
+
+pub struct NodeService;
+
+impl NodeService {
+    pub fn check_status() -> NodeStatus {
+        let node_version = shell::run_command("node", &["--version"])
+            .ok()
+            .and_then(|o| if o.success { Some(o.stdout.trim().to_string()) } else { None });
+
+        let nvm_version = if cfg!(windows) {
+            shell::run_command("nvm", &["version"]).ok()
+                .and_then(|o| if o.success { Some(o.stdout.trim().to_string()) } else { None })
+        } else {
+            shell::run_command("bash", &["-c", "source ~/.nvm/nvm.sh && nvm --version"]).ok()
+                .and_then(|o| if o.success { Some(o.stdout.trim().to_string()) } else { None })
+        };
+
+        NodeStatus {
+            node_installed: node_version.is_some(),
+            node_version,
+            nvm_installed: nvm_version.is_some(),
+            nvm_version,
+        }
+    }
+
+    pub fn install_nvm() -> Result<InstallResult, AppError> {
+        let output = if cfg!(windows) {
+            shell::run_command("powershell", &["-Command", "irm https://github.com/coreybutler/nvm-windows/releases/latest/download/nvm-setup.exe -OutFile $env:TEMP\nvm-setup.exe; Start-Process $env:TEMP\nvm-setup.exe -Wait"])?
+        } else {
+            shell::run_command("bash", &["-c", "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"])?
+        };
+        Ok(InstallResult {
+            success: output.success,
+            message: if output.success { "NVM 安装成功".to_string() } else { output.stderr.clone() },
+            output: Some(format!("{}\n{}", output.stdout, output.stderr)),
+        })
+    }
+
+    pub fn install_node_lts() -> Result<InstallResult, AppError> {
+        let output = if cfg!(windows) {
+            shell::run_command("nvm", &["install", "lts"])?
+        } else {
+            shell::run_command("bash", &["-c", "source ~/.nvm/nvm.sh && nvm install --lts"])?
+        };
+        Ok(InstallResult {
+            success: output.success,
+            message: if output.success { "Node.js LTS 安装成功".to_string() } else { output.stderr.clone() },
+            output: Some(format!("{}\n{}", output.stdout, output.stderr)),
+        })
+    }
+}

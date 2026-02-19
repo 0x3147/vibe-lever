@@ -49,6 +49,9 @@ pub fn run() {
             commands::tool::uninstall_tool,
             commands::tool::check_tool_running,
             commands::tool::kill_tool_process,
+            commands::tool::check_node_status,
+            commands::tool::install_nvm,
+            commands::tool::install_node_lts,
             // mcp commands
             commands::mcp::get_mcp_servers,
             commands::mcp::add_mcp_server,
