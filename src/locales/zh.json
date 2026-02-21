@@ -38,7 +38,12 @@
     "vendorKey": "供应商标识",
     "configJson": "扩展配置 (JSON)",
     "activateSuccess": "已激活，配置已写入",
-    "noVendors": "暂无供应商，点击添加"
+    "noVendors": "暂无供应商，点击添加",
+    "reasoningEffort": "思考程度",
+    "reasoningXhigh": "极高",
+    "reasoningHigh": "高",
+    "reasoningMedium": "中",
+    "reasoningLow": "低"
   },
   "tools": {
     "title": "安装管理",

@@ -83,42 +83,50 @@ pub fn write_codex_config(vendor: &Vendor) -> Result<(), AppError> {
     std::fs::create_dir_all(&codex_dir)?;
 
     // 写入 auth.json
-    let auth = serde_json::json!({
-        "OPENAI_API_KEY": vendor.token
-    });
-    std::fs::write(
-        codex_dir.join("auth.json"),
-        serde_json::to_string_pretty(&auth)?,
-    )?;
+    let auth = serde_json::json!({ "OPENAI_API_KEY": vendor.token });
+    std::fs::write(codex_dir.join("auth.json"), serde_json::to_string_pretty(&auth)?)?;
 
-    // 解析 config_json 获取 Codex 特有配置
     let provider_key = vendor.vendor_key.as_deref().unwrap_or("custom");
-    let mut model = "gpt-5".to_string();
-
+    let mut model = vendor.model.clone().unwrap_or_else(|| "gpt-4o".to_string());
+    let mut reasoning_effort = "high".to_string();
     if let Some(config_str) = &vendor.config_json {
         if let Ok(config) = serde_json::from_str::<serde_json::Value>(config_str) {
             if let Some(m) = config.get("model").and_then(|v| v.as_str()) {
                 model = m.to_string();
             }
+            if let Some(r) = config.get("reasoningEffort").and_then(|v| v.as_str()) {
+                reasoning_effort = r.to_string();
+            }
         }
     }
 
-    let config_toml = format!(
-        r#"model_provider = "{provider_key}"
-model = "{model}"
+    // 读取现有配置或创建空配置（保留其他 provider）
+    let config_path = codex_dir.join("config.toml");
+    let mut cfg: toml::Value = if config_path.exists() {
+        let content = std::fs::read_to_string(&config_path)?;
+        toml::from_str(&content).unwrap_or(toml::Value::Table(toml::map::Map::new()))
+    } else {
+        toml::Value::Table(toml::map::Map::new())
+    };
 
-[model_providers.{provider_key}]
-name = "{name}"
-base_url = "{base_url}"
-wire_api = "openai"
-"#,
-        provider_key = provider_key,
-        model = model,
-        name = vendor.name,
-        base_url = vendor.base_url
-    );
+    let table = cfg.as_table_mut().unwrap();
+    table.insert("model_provider".into(), toml::Value::String(provider_key.to_string()));
+    table.insert("model".into(), toml::Value::String(model));
+    table.insert("model_reasoning_effort".into(), toml::Value::String(reasoning_effort));
+    table.insert("disable_response_storage".into(), toml::Value::Boolean(true));
 
-    std::fs::write(codex_dir.join("config.toml"), config_toml)?;
+    let providers = table.entry("model_providers")
+        .or_insert(toml::Value::Table(toml::map::Map::new()));
+    if let Some(providers_table) = providers.as_table_mut() {
+        let mut provider = toml::map::Map::new();
+        provider.insert("name".into(), toml::Value::String(vendor.name.clone()));
+        provider.insert("base_url".into(), toml::Value::String(vendor.base_url.clone()));
+        provider.insert("wire_api".into(), toml::Value::String("openai".to_string()));
+        provider.insert("requires_openai_auth".into(), toml::Value::Boolean(true));
+        providers_table.insert(provider_key.to_string(), toml::Value::Table(provider));
+    }
+
+    std::fs::write(&config_path, toml::to_string_pretty(&cfg)?)?;
     Ok(())
 }
 

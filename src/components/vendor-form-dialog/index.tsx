@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBolt, faScaleBalanced, faRocket } from "@fortawesome/free-solid-svg-icons";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [tierModels, setTierModels] = useState<Record<string, string>>({});
   const [token, setToken] = useState("");
+  const [reasoningEffort, setReasoningEffort] = useState("xhigh");
   const [custom, setCustom] = useState<VendorInput>(EMPTY);
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +49,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
         setSelectedTier(null);
         setTierModels({});
         setToken("");
+        setReasoningEffort("xhigh");
         setCustom(EMPTY);
       }
     }
@@ -77,12 +81,14 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
     if (!editing && tab === "preset") {
       const p = PRESETS.find(p => p.vendor_key === selectedPreset);
       if (!p || !token) return;
-      const config_json = p.model_groups
-        ? JSON.stringify(Object.fromEntries(p.model_groups.map(g => [
-            g.value === "haiku" ? "haikuModel" : g.value === "sonnet" ? "sonnetModel" : "opusModel",
-            tierModels[g.value] ?? g.models[0]
-          ])))
-        : null;
+      const configObj: Record<string, unknown> = tool === "codex" ? { reasoningEffort } : {};
+      if (p.model_groups) {
+        p.model_groups.forEach(g => {
+          const key = g.value === "haiku" ? "haikuModel" : g.value === "sonnet" ? "sonnetModel" : "opusModel";
+          configObj[key] = tierModels[g.value] ?? g.models[0];
+        });
+      }
+      const config_json = Object.keys(configObj).length > 0 ? JSON.stringify(configObj) : null;
       input = { name: p.name, vendor_key: p.vendor_key, base_url: selectedUrl || p.base_url, token, model: selectedModel || p.model, config_json };
     } else {
       if (!custom.name || !custom.base_url || !custom.token) return;
@@ -165,9 +171,10 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                         {activePreset.model_groups.map(g => (
                           <button key={g.value} type="button"
                             onClick={() => { const m = tierModels[g.value] ?? g.models[0]; setSelectedTier(g.value); setSelectedModel(m); }}
-                            className={`flex-1 py-1.5 text-xs font-medium rounded-md border transition-colors ${
+                            className={`flex-1 py-1.5 text-xs font-medium rounded-md border transition-colors flex items-center justify-center gap-1 ${
                               selectedTier === g.value ? "bg-primary/10 border-primary text-primary" : "border-border/60 text-muted-foreground hover:border-primary/50"
                             }`}>
+                            <FontAwesomeIcon icon={g.value === "haiku" ? faBolt : g.value === "sonnet" ? faScaleBalanced : faRocket} className="text-[10px]" />
                             {g.label}
                           </button>
                         ))}
@@ -203,6 +210,19 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                     <Label className="text-xs">{t("common.token")} *</Label>
                     <Input className="h-8 text-sm" type="password" value={token} onChange={e => setToken(e.target.value)} autoFocus />
                   </div>
+                  {tool === "codex" && (
+                    <div className="space-y-1">
+                      <Label className="text-xs">{t("vendors.reasoningEffort")}</Label>
+                      <Select value={reasoningEffort} onValueChange={setReasoningEffort}>
+                        <SelectTrigger className="h-8 text-sm"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {(["xhigh", "high", "medium", "low"] as const).map(v => (
+                            <SelectItem key={v} value={v}>{t(`vendors.reasoning${v.charAt(0).toUpperCase() + v.slice(1)}`)}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
                   {activePreset.promo_links ? (
                     <div className="flex gap-2">
                       {activePreset.promo_links.map(l => (

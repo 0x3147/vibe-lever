@@ -14,6 +14,8 @@ pub enum AppError {
     JsonParse(#[from] serde_json::Error),
     #[error("TOML 解析失败: {0}")]
     TomlParse(#[from] toml::de::Error),
+    #[error("TOML 序列化失败: {0}")]
+    TomlSerialize(#[from] toml::ser::Error),
 }
 
 impl Serialize for AppError {

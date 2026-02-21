@@ -38,7 +38,12 @@
     "vendorKey": "Vendor Key",
     "configJson": "Extra Config (JSON)",
     "activateSuccess": "Activated, config written",
-    "noVendors": "No vendors yet, click to add"
+    "noVendors": "No vendors yet, click to add",
+    "reasoningEffort": "Reasoning Effort",
+    "reasoningXhigh": "Extra High",
+    "reasoningHigh": "High",
+    "reasoningMedium": "Medium",
+    "reasoningLow": "Low"
   },
   "tools": {
     "title": "Install Management",
