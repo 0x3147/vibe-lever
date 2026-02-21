@@ -6,9 +6,7 @@ pub enum AppError {
     Database(#[from] rusqlite::Error),
     #[error("文件操作失败: {0}")]
     FileSystem(#[from] std::io::Error),
-    #[error("配置解析失败: {0}")]
-    ConfigParse(String),
-    #[error("工具未安装: {0}")]
+#[error("工具未安装: {0}")]
     ToolNotInstalled(String),
     #[error("命令执行失败: {0}")]
     ShellCommand(String),

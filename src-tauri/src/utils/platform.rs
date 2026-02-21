@@ -16,7 +16,3 @@ pub fn get_platform_info() -> PlatformInfo {
         arch: arch.to_string(),
     }
 }
-
-pub fn get_home_dir() -> Option<std::path::PathBuf> {
-    dirs::home_dir()
-}
