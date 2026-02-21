@@ -126,7 +126,7 @@ export const PRESETS: Preset[] = [
     promo_url: "https://www.volcengine.com/activity/codingplan",
   },
   {
-    name: "ZenMux", vendor_key: "zenmux", logo: zenmuxLogo,
+    name: "ZenMux", vendor_key: "zenmux", logo: zenmuxLogo, dark_invert: true,
     base_url: "https://zenmux.ai/api/anthropic", model: "anthropic/claude-sonnet-4.6",
     models: [],
     model_groups: [
