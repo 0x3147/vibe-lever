@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Background Gradient: Deep Slate to Black -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1121" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    
+    <!-- Tri-Fusion AI Gradient -->
+    <!-- Integrates OpenAI Green -> Gemini Blue/Purple -> Claude Peach/Gold -->
+    <linearGradient id="triFusion" x1="10%" y1="10%" x2="90%" y2="90%">
+      <stop offset="0%" stop-color="#10A37F" />   <!-- GPT Green -->
+      <stop offset="30%" stop-color="#4285F4" />  <!-- Gemini Blue -->
+      <stop offset="60%" stop-color="#9333EA" />  <!-- Gemini Purple -->
+      <stop offset="85%" stop-color="#E87B66" />  <!-- Claude Orange/Peach -->
+      <stop offset="100%" stop-color="#E7A45B" /> <!-- Claude Gold -->
+    </linearGradient>
+
+    <!-- Filters for aesthetics -->
+    <filter id="glowWhite" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="dropShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+    
+    <filter id="deepShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+
+  <!-- Base App Icon canvas -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <rect width="510" height="510" x="1" y="1" rx="112" fill="none" stroke="#334155" stroke-width="2" opacity="0.6" />
+
+  <!-- Layer 1: The OpenAI-inspired Aperture Swirl 
+       Uses 6 sweeping overlapping arcs with the tri-fusion gradient -->
+  <g transform="translate(256, 256)" stroke="url(#triFusion)" stroke-width="26" stroke-linecap="round" fill="none" filter="url(#dropShadow)" opacity="0.95">
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(0)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(60)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(120)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(180)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(240)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(300)" />
+  </g>
+
+  <!-- Layer 2: The Claude/Anthropic-inspired distinct geometric Asterisk
+       Uses Claude's classic warm beige/neutral tone, resting structurally over the aperture -->
+  <g transform="translate(256, 256)" stroke="#F5F3EC" stroke-width="14" stroke-linecap="round" filter="url(#deepShadow)">
+    <line x1="0" y1="-64" x2="0" y2="64" />
+    <line x1="-55.4" y1="-32" x2="55.4" y2="32" />
+    <line x1="55.4" y1="-32" x2="-55.4" y2="32" />
+  </g>
+
+  <!-- Layer 3: The Gemini-inspired 4-pointed Magic Sparks 
+       Luminous and elegant, centered directly atop the structure -->
+  
+  <!-- Central Primary Spark -->
+  <path d="M 256 216 Q 256 256 296 256 Q 256 256 256 296 Q 256 256 216 256 Q 256 256 256 216 Z" fill="#FFFFFF" filter="url(#glowWhite)" />
+
+  <!-- Floating Secondary Spark (Classic Gemini layout) -->
+  <path d="M 380 120 Q 380 144 404 144 Q 380 144 380 168 Q 380 144 356 144 Q 380 144 380 120 Z" fill="#E2E8F0" filter="url(#glowWhite)" opacity="0.9" />
+</svg>
