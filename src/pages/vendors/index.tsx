@@ -84,6 +84,7 @@ export function VendorsPage({ tool }: Props) {
 
       <VendorFormDialog
         open={dialogOpen}
+        tool={tool}
         editing={editing}
         onClose={() => setDialogOpen(false)}
         onSubmit={handleSubmit}
