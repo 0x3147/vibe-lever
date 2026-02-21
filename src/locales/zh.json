@@ -39,6 +39,7 @@
     "configJson": "扩展配置 (JSON)",
     "activateSuccess": "已激活，配置已写入",
     "noVendors": "暂无供应商，点击添加",
+    "processRunning": "检测到进程正在运行，激活前需要终止，是否继续？",
     "reasoningEffort": "思考程度",
     "reasoningXhigh": "极高",
     "reasoningHigh": "高",

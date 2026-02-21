@@ -39,6 +39,7 @@
     "configJson": "Extra Config (JSON)",
     "activateSuccess": "Activated, config written",
     "noVendors": "No vendors yet, click to add",
+    "processRunning": "Process is running. It must be stopped before activating. Continue?",
     "reasoningEffort": "Reasoning Effort",
     "reasoningXhigh": "Extra High",
     "reasoningHigh": "High",

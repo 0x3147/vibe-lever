@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { invoke } from "@tauri-apps/api/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { VendorCard } from "@/components/vendor-card";
 import { VendorFormDialog } from "@/components/vendor-form-dialog";
 import { useVendorStore } from "@/stores/use-vendor-store";
@@ -18,6 +20,7 @@ export function VendorsPage({ tool }: Props) {
   const { vendors, loading, fetchVendors, addVendor, updateVendor, deleteVendor, activateVendor } = useVendorStore();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Vendor | null>(null);
+  const [pendingActivateId, setPendingActivateId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchVendors(tool);
@@ -31,21 +34,27 @@ export function VendorsPage({ tool }: Props) {
     }
   };
 
-  const handleEdit = (vendor: Vendor) => {
-    setEditing(vendor);
-    setDialogOpen(true);
+  const handleActivate = async (id: number) => {
+    const running = await invoke<boolean>("check_tool_running", { tool });
+    if (running) {
+      setPendingActivateId(id);
+    } else {
+      await activateVendor(tool, id);
+    }
   };
 
-  const handleAdd = () => {
-    setEditing(null);
-    setDialogOpen(true);
+  const handleConfirmKill = async () => {
+    if (pendingActivateId === null) return;
+    await invoke("kill_tool_process", { tool });
+    await activateVendor(tool, pendingActivateId);
+    setPendingActivateId(null);
   };
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out fill-mode-both">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold tracking-tight">{t("vendors.title")}</h2>
-        <Button size="sm" onClick={handleAdd} className="rounded-full px-4 font-medium transition-transform hover:scale-105 active:scale-95">
+        <Button size="sm" onClick={() => { setEditing(null); setDialogOpen(true); }} className="rounded-full px-4 font-medium transition-transform hover:scale-105 active:scale-95">
           <FontAwesomeIcon icon={faPlus} className="mr-2 text-xs" />
           {t("vendors.add")}
         </Button>
@@ -66,16 +75,16 @@ export function VendorsPage({ tool }: Props) {
       ) : (
         <div className="space-y-3">
           {vendors.map((v, index) => (
-            <div 
-              key={v.id} 
+            <div
+              key={v.id}
               className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
               style={{ animationDuration: '500ms', animationDelay: `${75 * index}ms` }}
             >
               <VendorCard
                 vendor={v}
-                onEdit={handleEdit}
+                onEdit={(vendor) => { setEditing(vendor); setDialogOpen(true); }}
                 onDelete={(id) => deleteVendor(id)}
-                onActivate={(id) => activateVendor(tool, id)}
+                onActivate={handleActivate}
               />
             </div>
           ))}
@@ -89,6 +98,19 @@ export function VendorsPage({ tool }: Props) {
         onClose={() => setDialogOpen(false)}
         onSubmit={handleSubmit}
       />
+
+      <Dialog open={pendingActivateId !== null} onOpenChange={(o) => !o && setPendingActivateId(null)}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t("common.confirm")}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">{t("vendors.processRunning")}</p>
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setPendingActivateId(null)}>{t("common.cancel")}</Button>
+            <Button size="sm" onClick={handleConfirmKill}>{t("common.confirm")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
