@@ -1,35 +1,13 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { Vendor, VendorInput, PresetVendor } from "@/types/vendor";
-
-import zhipuLogo from "@/assets/images/zai.svg";
-import moonshotLogo from "@/assets/images/moonshot.svg";
-import deepseekLogo from "@/assets/images/deepseek-color.svg";
-import qwenLogo from "@/assets/images/qwen-color.svg";
-import openaiLogo from "@/assets/images/openai-logo.svg";
-import doubaoLogo from "@/assets/images/doubao-color.svg";
-import minimaxLogo from "@/assets/images/minimax-color.svg";
-import geminiLogo from "@/assets/images/gemini-color.svg";
-import volcengineLogo from "@/assets/images/volcengine-color.svg";
-
-const PRESETS: (PresetVendor & { logo: string; models: string[]; modelLabels?: Record<string, string>; base_urls?: { label: string; value: string }[] })[] = [
-  { name: "GLM",       vendor_key: "zhipu",      base_url: "https://open.bigmodel.cn/api/anthropic",                   model: "glm-5",               logo: zhipuLogo,      models: ["glm-5", "glm-4.7"], base_urls: [{ label: "国内站", value: "https://open.bigmodel.cn/api/anthropic" }, { label: "国际站", value: "https://api.z.ai/api/anthropic" }] },
-  { name: "KIMI",      vendor_key: "moonshot",   base_url: "https://api.kimi.com/coding/",                             model: "kimi-for-coding",      logo: moonshotLogo,   models: ["kimi-for-coding"] },
-  { name: "DeepSeek",  vendor_key: "deepseek",   base_url: "https://api.deepseek.com/anthropic",                       model: "deepseek-chat",        logo: deepseekLogo,   models: ["deepseek-chat", "deepseek-reasoner"], modelLabels: { "deepseek-chat": "DeepSeek-V3.2", "deepseek-reasoner": "DeepSeek-V3.2(thinking)" } },
-  { name: "阿里云百炼", vendor_key: "aliyun",     base_url: "https://coding.dashscope.aliyuncs.com/apps/anthropic",    model: "qwen3.5-plus",         logo: qwenLogo,       models: ["qwen3.5-plus", "qwen3-max-2026-01-23", "qwen3-coder-next", "qwen3-coder-plus", "glm-4.7", "kimi-k2.5"] },
-  { name: "OpenAI",    vendor_key: "openai",     base_url: "https://api.openai.com/v1/",                               model: "gpt-4o",               logo: openaiLogo,     models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "o1", "o3-mini"] },
-  { name: "豆包",      vendor_key: "doubao",     base_url: "https://ark.cn-beijing.volces.com/api/v3/chat/completions", model: "doubao-seed-2-0-pro-260215", logo: doubaoLogo, models: ["doubao-seed-2-0-pro-260215", "doubao-seed-2-0-lite-260215", "doubao-seed-2-0-mini-260215", "doubao-seed-code-preview-latest"], modelLabels: { "doubao-seed-2-0-pro-260215": "Doubao-Seed-2.0-pro", "doubao-seed-2-0-lite-260215": "Doubao-Seed-2.0-lite", "doubao-seed-2-0-mini-260215": "Doubao-Seed-2.0-mini", "doubao-seed-code-preview-latest": "Doubao-Seed-2.0-Code" } },
-  { name: "MiniMax",   vendor_key: "minimax",    base_url: "https://api.minimaxi.com/anthropic",                       model: "MiniMax-M2.5",         logo: minimaxLogo,    models: ["MiniMax-M2.5"] },
-  { name: "Gemini",    vendor_key: "gemini",     base_url: "https://generativelanguage.googleapis.com/v1beta/openai/", model: "gemini-2.0-flash",     logo: geminiLogo,     models: ["gemini-2.0-flash", "gemini-2.0-pro", "gemini-1.5-pro", "gemini-1.5-flash"] },
-  { name: "火山方舟",  vendor_key: "volcengine", base_url: "https://ark.cn-beijing.volces.com/api/coding",             model: "doubao-seed-2.0-code", logo: volcengineLogo, models: ["doubao-seed-2.0-code", "doubao-seed-code", "glm-4.7", "deepseek-v3.2", "kimi-k2-thinking", "kimi-k2.5"] },
-];
-
-const CLAUDE_CODE_EXCLUDED = ["openai", "gemini"];
+import type { Vendor, VendorInput } from "@/types/vendor";
+import { PRESETS, CLAUDE_CODE_EXCLUDED } from "./presets";
 const EMPTY: VendorInput = { name: "", vendor_key: null, base_url: "", token: "", model: null, config_json: null };
 
 interface Props {
@@ -52,14 +30,14 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
 
   const presets = tool === "claude-code"
     ? PRESETS.filter(p => !CLAUDE_CODE_EXCLUDED.includes(p.vendor_key))
-    : PRESETS;
+    : [];
 
   useEffect(() => {
     if (open) {
       if (editing) {
         setCustom({ name: editing.name, vendor_key: editing.vendor_key, base_url: editing.base_url, token: editing.token, model: editing.model, config_json: editing.config_json });
       } else {
-        setTab("preset");
+        setTab(presets.length > 0 ? "preset" : "custom");
         setSelectedPreset(null);
         setSelectedModel("");
         setSelectedUrl("");
@@ -99,6 +77,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
   const setC = (k: keyof VendorInput, v: string) => setCustom(f => ({ ...f, [k]: v || null }));
 
   const activePreset = PRESETS.find(p => p.vendor_key === selectedPreset);
+  const activePromoUrl = activePreset?.base_urls?.find(u => u.value === selectedUrl)?.promo_url ?? activePreset?.promo_url;
   const isDisabled = loading || (
     !editing && tab === "preset" ? (!selectedPreset || !token) : (!custom.name || !custom.base_url || !custom.token)
   );
@@ -110,7 +89,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
           <DialogTitle>{editing ? t("vendors.edit") : t("vendors.add")}</DialogTitle>
         </DialogHeader>
 
-        {!editing && (
+        {!editing && presets.length > 0 && (
           <div className="flex gap-1 p-1 rounded-lg bg-muted/50 border border-border/50">
             {(["preset", "custom"] as const).map(t2 => (
               <button key={t2} type="button" onClick={() => setTab(t2)}
@@ -127,9 +106,10 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
               <div className="grid grid-cols-4 gap-2">
                 {presets.map((p) => (
                   <button key={p.vendor_key} type="button" onClick={() => handleSelectPreset(p.vendor_key)}
-                    className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all duration-150 ${
+                    className={`relative flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all duration-150 ${
                       selectedPreset === p.vendor_key ? "border-primary bg-primary/10 shadow-sm" : "border-border/60 hover:border-primary/50 hover:bg-accent/50"
                     }`}>
+                    {p.hot && <span className="absolute -top-1.5 -right-1.5 px-1 py-0.5 text-[8px] font-bold leading-none rounded-full bg-orange-500 text-white">HOT</span>}
                     <img src={p.logo} alt={p.name} className="w-7 h-7 object-contain" />
                     <span className="text-[10px] text-center leading-tight text-muted-foreground">{p.name}</span>
                   </button>
@@ -174,6 +154,13 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                     <Label className="text-xs">{t("common.token")} *</Label>
                     <Input className="h-8 text-sm" type="password" value={token} onChange={e => setToken(e.target.value)} autoFocus />
                   </div>
+                  {activePromoUrl && (
+                    <button type="button" onClick={() => openUrl(activePromoUrl)}
+                      className="flex items-center justify-between px-3 py-2 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors group w-full">
+                      <span className="text-xs font-medium text-primary">即刻获取 {activePreset!.name} Coding 特惠套餐 🔥</span>
+                      <span className="text-primary text-xs group-hover:translate-x-0.5 transition-transform">→</span>
+                    </button>
+                  )}
                 </>
               )}
             </>
