@@ -1,5 +1,6 @@
 import type { PresetVendor } from "@/types/vendor";
 
+import claudeLogo from "@/assets/images/claude-logo.svg";
 import zhipuLogo from "@/assets/images/zai.svg";
 import moonshotLogo from "@/assets/images/moonshot.svg";
 import deepseekLogo from "@/assets/images/deepseek-color.svg";
@@ -16,6 +17,8 @@ export type Preset = PresetVendor & {
   modelLabels?: Record<string, string>;
   promo_url?: string;
   hot?: boolean;
+  tools?: string[];
+  codex_base_url?: string;
   base_urls?: { label: string; value: string; promo_url?: string }[];
 };
 
@@ -79,6 +82,18 @@ export const PRESETS: Preset[] = [
     base_url: "https://ark.cn-beijing.volces.com/api/coding", model: "doubao-seed-2.0-code",
     models: ["doubao-seed-2.0-code", "doubao-seed-code", "glm-4.7", "deepseek-v3.2", "kimi-k2-thinking", "kimi-k2.5"],
     promo_url: "https://www.volcengine.com/activity/codingplan",
+  },
+  {
+    name: "FoxCode", vendor_key: "foxcode", logo: claudeLogo,
+    tools: ["claude-code", "codex"],
+    base_url: "https://code.newcli.com/claude", model: "",
+    models: [],
+    codex_base_url: "https://code.newcli.com/codex/v1",
+    base_urls: [
+      { label: "官方线路", value: "https://code.newcli.com/claude" },
+      { label: "AWS线路", value: "https://code.newcli.com/claude/aws" },
+      { label: "AWS思考线路", value: "https://code.newcli.com/claude/droid" },
+    ],
   },
 ];
 

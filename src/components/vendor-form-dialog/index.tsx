@@ -28,9 +28,9 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
   const [custom, setCustom] = useState<VendorInput>(EMPTY);
   const [loading, setLoading] = useState(false);
 
-  const presets = tool === "claude-code"
-    ? PRESETS.filter(p => !CLAUDE_CODE_EXCLUDED.includes(p.vendor_key))
-    : [];
+  const presets = PRESETS.filter(p =>
+    p.tools ? p.tools.includes(tool) : tool === "claude-code" && !CLAUDE_CODE_EXCLUDED.includes(p.vendor_key)
+  );
 
   useEffect(() => {
     if (open) {
@@ -55,7 +55,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
       const p = PRESETS.find(p => p.vendor_key === key)!;
       setSelectedPreset(key);
       setSelectedModel(p.model);
-      setSelectedUrl(p.base_urls ? p.base_urls[0].value : "");
+      setSelectedUrl(tool === "codex" && p.codex_base_url ? p.codex_base_url : p.base_urls ? p.base_urls[0].value : "");
     }
   };
 
@@ -119,7 +119,9 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                 <>
                   <div className="space-y-1">
                     <Label className="text-xs text-muted-foreground">{t("vendors.baseUrl")}</Label>
-                    {activePreset.base_urls ? (
+                    {tool === "codex" && activePreset.codex_base_url ? (
+                      <Input className="h-8 text-xs text-muted-foreground bg-muted/30" value={activePreset.codex_base_url} readOnly />
+                    ) : activePreset.base_urls ? (
                       <Select value={selectedUrl} onValueChange={setSelectedUrl}>
                         <SelectTrigger className="h-8 text-xs">
                           <SelectValue />
@@ -137,6 +139,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                       <Input className="h-8 text-xs text-muted-foreground bg-muted/30" value={activePreset.base_url} readOnly />
                     )}
                   </div>
+                  {activePreset.models.length > 0 && (
                   <div className="space-y-1">
                     <Label className="text-xs">{t("common.model")}</Label>
                     <Select value={selectedModel} onValueChange={setSelectedModel}>
@@ -150,6 +153,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                       </SelectContent>
                     </Select>
                   </div>
+                  )}
                   <div className="space-y-1">
                     <Label className="text-xs">{t("common.token")} *</Label>
                     <Input className="h-8 text-sm" type="password" value={token} onChange={e => setToken(e.target.value)} autoFocus />
