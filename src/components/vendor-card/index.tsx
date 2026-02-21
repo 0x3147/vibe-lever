@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash, faBolt } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Vendor } from "@/types/vendor";
@@ -31,11 +31,9 @@ export function VendorCard({ vendor, onEdit, onDelete, onActivate }: Props) {
         </div>
       </div>
       <div className="flex items-center gap-1.5 shrink-0 ml-4 opacity-70 group-hover:opacity-100 transition-opacity">
-        {!vendor.is_active && (
-          <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => onActivate(vendor.id)}>
-            <FontAwesomeIcon icon={faBolt} className="text-xs" />
-          </Button>
-        )}
+        <Button size="sm" variant="outline" className="h-7 text-xs rounded-lg" disabled={vendor.is_active} onClick={() => onActivate(vendor.id)}>
+          {vendor.is_active ? t("common.active") : t("common.activate")}
+        </Button>
         <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg hover:bg-accent hover:text-foreground transition-colors" onClick={() => onEdit(vendor)}>
           <FontAwesomeIcon icon={faPen} className="text-xs" />
         </Button>

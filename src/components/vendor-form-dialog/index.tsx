@@ -77,7 +77,13 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
     if (!editing && tab === "preset") {
       const p = PRESETS.find(p => p.vendor_key === selectedPreset);
       if (!p || !token) return;
-      input = { name: p.name, vendor_key: p.vendor_key, base_url: selectedUrl || p.base_url, token, model: selectedModel || p.model, config_json: null };
+      const config_json = p.model_groups
+        ? JSON.stringify(Object.fromEntries(p.model_groups.map(g => [
+            g.value === "haiku" ? "haikuModel" : g.value === "sonnet" ? "sonnetModel" : "opusModel",
+            tierModels[g.value] ?? g.models[0]
+          ])))
+        : null;
+      input = { name: p.name, vendor_key: p.vendor_key, base_url: selectedUrl || p.base_url, token, model: selectedModel || p.model, config_json };
     } else {
       if (!custom.name || !custom.base_url || !custom.token) return;
       input = custom;
