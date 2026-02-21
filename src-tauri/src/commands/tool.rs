@@ -18,9 +18,9 @@ pub async fn install_tool(
 ) -> Result<InstallResult, AppError> {
     let result = ToolService::install(&tool, &method)?;
     if result.success {
-        if let Ok(s) = ToolService::check_status(&tool, &db) {
-            let _ = s;
-        }
+        use crate::services::tool_cache_service::ToolCacheService;
+        ToolCacheService::delete(&db, &tool);
+        let _ = ToolService::check_status(&tool, &db);
     }
     Ok(result)
 }
@@ -106,9 +106,9 @@ pub async fn install_tool_streaming(
 
     let success = status.success();
     if success {
-        if let Ok(s) = ToolService::check_status(&tool, &db) {
-            let _ = s;
-        }
+        use crate::services::tool_cache_service::ToolCacheService;
+        ToolCacheService::delete(&db, &tool);
+        let _ = ToolService::check_status(&tool, &db);
     }
     app.emit("install-done", serde_json::json!({ "success": success }))
         .map_err(|e| AppError::ShellCommand(e.to_string()))?;

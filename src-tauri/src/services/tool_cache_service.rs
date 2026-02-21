@@ -23,6 +23,11 @@ impl ToolCacheService {
         .ok()
     }
 
+    pub fn delete(db: &Database, tool: &str) {
+        let conn = db.conn.lock().unwrap();
+        let _ = conn.execute("DELETE FROM tool_cache WHERE tool = ?1", [tool]);
+    }
+
     pub fn set(db: &Database, tool: &str, status: &ToolStatus) {
         let conn = db.conn.lock().unwrap();
         let _ = conn.execute(
