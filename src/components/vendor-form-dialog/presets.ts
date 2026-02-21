@@ -16,15 +16,20 @@ export type Preset = PresetVendor & {
   models: string[];
   modelLabels?: Record<string, string>;
   promo_url?: string;
+  promo_links?: { label: string; url: string }[];
   hot?: boolean;
+  dark_invert?: boolean;
   tools?: string[];
   codex_base_url?: string;
+  codex_model?: string;
+  codex_models?: string[];
+  codex_logo?: string;
   base_urls?: { label: string; value: string; promo_url?: string }[];
 };
 
 export const PRESETS: Preset[] = [
   {
-    name: "GLM", vendor_key: "zhipu", logo: zhipuLogo, hot: true,
+    name: "GLM", vendor_key: "zhipu", logo: zhipuLogo, hot: true, dark_invert: true,
     base_url: "https://open.bigmodel.cn/api/anthropic", model: "glm-5",
     models: ["glm-5", "glm-4.7"],
     base_urls: [
@@ -33,7 +38,7 @@ export const PRESETS: Preset[] = [
     ],
   },
   {
-    name: "KIMI", vendor_key: "moonshot", logo: moonshotLogo, hot: true,
+    name: "KIMI", vendor_key: "moonshot", logo: moonshotLogo, hot: true, dark_invert: true,
     base_url: "https://api.kimi.com/coding/", model: "kimi-for-coding",
     models: ["kimi-for-coding"],
     promo_url: "https://www.kimi.com/code?from=membership&track_id=297b4590-ab61-4327-8d36-c0ab90d24f40",
@@ -51,7 +56,7 @@ export const PRESETS: Preset[] = [
     promo_url: "https://www.aliyun.com/benefit/scene/coding?spm=5176.42028462.nav-v2-dropdown-menu-3.d_main_4_3.5421154a9GKjn0&scm=20140722.M_10964013._.V_1&tid=J_001",
   },
   {
-    name: "OpenAI", vendor_key: "openai", logo: openaiLogo,
+    name: "OpenAI", vendor_key: "openai", logo: openaiLogo, dark_invert: true,
     base_url: "https://api.openai.com/v1/", model: "gpt-4o",
     models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "o1", "o3-mini"],
   },
@@ -84,11 +89,18 @@ export const PRESETS: Preset[] = [
     promo_url: "https://www.volcengine.com/activity/codingplan",
   },
   {
-    name: "FoxCode", vendor_key: "foxcode", logo: claudeLogo,
+    name: "FoxCode", vendor_key: "foxcode", logo: claudeLogo, dark_invert: true,
     tools: ["claude-code", "codex"],
     base_url: "https://code.newcli.com/claude", model: "",
     models: [],
     codex_base_url: "https://code.newcli.com/codex/v1",
+    codex_model: "gpt-5.3-codex",
+    codex_models: ["gpt-5.3-codex", "gpt-5.2-codex", "gpt-5.2"],
+    codex_logo: openaiLogo,
+    promo_links: [
+      { label: "官方地址", url: "https://foxcode.rjj.cc/dashboard" },
+      { label: "foxcode发卡铺", url: "https://fk.hshwk.org/?categoryId=6" },
+    ],
     base_urls: [
       { label: "官方线路", value: "https://code.newcli.com/claude" },
       { label: "AWS线路", value: "https://code.newcli.com/claude/aws" },

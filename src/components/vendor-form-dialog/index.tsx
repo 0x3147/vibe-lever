@@ -54,7 +54,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
     } else {
       const p = PRESETS.find(p => p.vendor_key === key)!;
       setSelectedPreset(key);
-      setSelectedModel(p.model);
+      setSelectedModel(tool === "codex" && p.codex_model ? p.codex_model : p.model);
       setSelectedUrl(tool === "codex" && p.codex_base_url ? p.codex_base_url : p.base_urls ? p.base_urls[0].value : "");
     }
   };
@@ -110,7 +110,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                       selectedPreset === p.vendor_key ? "border-primary bg-primary/10 shadow-sm" : "border-border/60 hover:border-primary/50 hover:bg-accent/50"
                     }`}>
                     {p.hot && <span className="absolute -top-1.5 -right-1.5 px-1 py-0.5 text-[8px] font-bold leading-none rounded-full bg-orange-500 text-white">HOT</span>}
-                    <img src={p.logo} alt={p.name} className="w-7 h-7 object-contain" />
+                    <img src={tool === "codex" && p.codex_logo ? p.codex_logo : p.logo} alt={p.name} className={`w-7 h-7 object-contain${p.dark_invert ? " dark:invert" : ""}`} />
                     <span className="text-[10px] text-center leading-tight text-muted-foreground">{p.name}</span>
                   </button>
                 ))}
@@ -139,7 +139,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                       <Input className="h-8 text-xs text-muted-foreground bg-muted/30" value={activePreset.base_url} readOnly />
                     )}
                   </div>
-                  {activePreset.models.length > 0 && (
+                  {(() => { const ms = tool === "codex" && activePreset.codex_models ? activePreset.codex_models : activePreset.models; return ms.length > 0 && (
                   <div className="space-y-1">
                     <Label className="text-xs">{t("common.model")}</Label>
                     <Select value={selectedModel} onValueChange={setSelectedModel}>
@@ -147,18 +147,28 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {activePreset.models.map(m => (
+                        {ms.map(m => (
                           <SelectItem key={m} value={m}>{activePreset.modelLabels?.[m] ?? m}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
-                  )}
+                  ); })()}
                   <div className="space-y-1">
                     <Label className="text-xs">{t("common.token")} *</Label>
                     <Input className="h-8 text-sm" type="password" value={token} onChange={e => setToken(e.target.value)} autoFocus />
                   </div>
-                  {activePromoUrl && (
+                  {activePreset.promo_links ? (
+                    <div className="flex gap-2">
+                      {activePreset.promo_links.map(l => (
+                        <button key={l.url} type="button" onClick={() => openUrl(l.url)}
+                          className="flex-1 flex items-center justify-between px-3 py-2 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors group">
+                          <span className="text-xs font-medium text-primary">{l.label}</span>
+                          <span className="text-primary text-xs group-hover:translate-x-0.5 transition-transform">→</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : activePromoUrl && (
                     <button type="button" onClick={() => openUrl(activePromoUrl)}
                       className="flex items-center justify-between px-3 py-2 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors group w-full">
                       <span className="text-xs font-medium text-primary">即刻获取 {activePreset!.name} Coding 特惠套餐 🔥</span>
