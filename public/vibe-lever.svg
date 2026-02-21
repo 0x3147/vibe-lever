@@ -2,84 +2,64 @@
   <defs>
     <!-- Background Gradient: Deep Slate to Black -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="0%" stop-color="#0B1121" />
       <stop offset="100%" stop-color="#020617" />
     </linearGradient>
     
-    <!-- Primary Blue Gradient for Terminal Prompt & Active Track -->
-    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3B82F6" />
-      <stop offset="100%" stop-color="#1D4ED8" />
+    <!-- Tri-Fusion AI Gradient -->
+    <!-- Integrates OpenAI Green -> Gemini Blue/Purple -> Claude Peach/Gold -->
+    <linearGradient id="triFusion" x1="10%" y1="10%" x2="90%" y2="90%">
+      <stop offset="0%" stop-color="#10A37F" />   <!-- GPT Green -->
+      <stop offset="30%" stop-color="#4285F4" />  <!-- Gemini Blue -->
+      <stop offset="60%" stop-color="#9333EA" />  <!-- Gemini Purple -->
+      <stop offset="85%" stop-color="#E87B66" />  <!-- Claude Orange/Peach -->
+      <stop offset="100%" stop-color="#E7A45B" /> <!-- Claude Gold -->
     </linearGradient>
 
-    <!-- Emerald/Cyan Gradient for AI Spark -->
-    <linearGradient id="sparkGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#34D399" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
-
-    <!-- White Glow Filter -->
-    <filter id="glowWhite" x="-20%" y="-20%" width="140%" height="140%">
+    <!-- Filters for aesthetics -->
+    <filter id="glowWhite" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="6" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
 
-    <!-- Blue Glow Filter -->
-    <filter id="glowBlue" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="15" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-
-    <!-- Spark Glow Filter -->
-    <filter id="glowSpark" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="10" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    <filter id="dropShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.6"/>
     </filter>
     
-    <!-- Drop Shadow for Terminal Window -->
-    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.6"/>
-    </filter>
-    
-    <!-- Inner Shadow for Toggle Knob -->
-    <filter id="innerShadowKnob">
-      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    <filter id="deepShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000" flood-opacity="0.8"/>
     </filter>
   </defs>
 
-  <!-- Outline / Base App Icon -->
+  <!-- Base App Icon canvas -->
   <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
-  <!-- Glassy Border -->
-  <rect width="510" height="510" x="1" y="1" rx="112" fill="none" stroke="#334155" stroke-width="2" opacity="0.8" />
+  <rect width="510" height="510" x="1" y="1" rx="112" fill="none" stroke="#334155" stroke-width="2" opacity="0.6" />
 
-  <!-- Terminal/Code Window -->
-  <rect x="80" y="128" width="352" height="256" rx="24" fill="#0F172A" filter="url(#dropShadow)" stroke="#1E293B" stroke-width="4" />
-  
-  <!-- Terminal Header Traffic Lights -->
-  <circle cx="116" cy="160" r="7" fill="#EF4444" opacity="0.9" />
-  <circle cx="140" cy="160" r="7" fill="#F59E0B" opacity="0.9" />
-  <circle cx="164" cy="160" r="7" fill="#10B981" opacity="0.9" />
-  
-  <line x1="82" y1="184" x2="430" y2="184" stroke="#1E293B" stroke-width="2" />
+  <!-- Layer 1: The OpenAI-inspired Aperture Swirl 
+       Uses 6 sweeping overlapping arcs with the tri-fusion gradient -->
+  <g transform="translate(256, 256)" stroke="url(#triFusion)" stroke-width="26" stroke-linecap="round" fill="none" filter="url(#dropShadow)" opacity="0.95">
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(0)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(60)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(120)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(180)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(240)" />
+    <path d="M -36 -40 L -36 -130 A 46 46 0 0 1 56 -130" transform="rotate(300)" />
+  </g>
 
-  <!-- Terminal Code Arrow: > -->
-  <path d="M 128 236 L 180 276 L 128 316" fill="none" stroke="url(#blueGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" filter="url(#glowBlue)" />
+  <!-- Layer 2: The Claude/Anthropic-inspired distinct geometric Asterisk
+       Uses Claude's classic warm beige/neutral tone, resting structurally over the aperture -->
+  <g transform="translate(256, 256)" stroke="#F5F3EC" stroke-width="14" stroke-linecap="round" filter="url(#deepShadow)">
+    <line x1="0" y1="-64" x2="0" y2="64" />
+    <line x1="-55.4" y1="-32" x2="55.4" y2="32" />
+    <line x1="55.4" y1="-32" x2="-55.4" y2="32" />
+  </g>
 
-  <!-- The "Config Slider" representing the Lever / Control aspect -->
-  <!-- Inactive Track -->
-  <rect x="220" y="296" width="160" height="16" rx="8" fill="#1E293B" />
-  <!-- Active Track -->
-  <rect x="220" y="296" width="96" height="16" rx="8" fill="url(#blueGrad)" filter="url(#glowBlue)" opacity="0.8" />
-  <rect x="220" y="296" width="96" height="16" rx="8" fill="url(#blueGrad)" />
+  <!-- Layer 3: The Gemini-inspired 4-pointed Magic Sparks 
+       Luminous and elegant, centered directly atop the structure -->
   
-  <!-- Slider Knob -->
-  <circle cx="316" cy="304" r="22" fill="#FFFFFF" filter="url(#innerShadowKnob)" />
-  <circle cx="316" cy="304" r="8" fill="url(#blueGrad)" />
+  <!-- Central Primary Spark -->
+  <path d="M 256 216 Q 256 256 296 256 Q 256 256 256 296 Q 256 256 216 256 Q 256 256 256 216 Z" fill="#FFFFFF" filter="url(#glowWhite)" />
 
-  <!-- The AI Sparks emerging from the terminal (representing the AI injection/models) -->
-  <!-- Central Main Spark -->
-  <path d="M 330 230 Q 330 190 370 190 Q 330 190 330 150 Q 330 190 290 190 Q 330 190 330 230 Z" fill="url(#sparkGrad)" filter="url(#glowSpark)" />
-  
-  <!-- Secondary Spark -->
-  <path d="M 260 250 Q 260 230 280 230 Q 260 230 260 210 Q 260 230 240 230 Q 260 230 260 250 Z" fill="#60A5FA" filter="url(#glowWhite)" opacity="0.9" />
+  <!-- Floating Secondary Spark (Classic Gemini layout) -->
+  <path d="M 380 120 Q 380 144 404 144 Q 380 144 380 168 Q 380 144 356 144 Q 380 144 380 120 Z" fill="#E2E8F0" filter="url(#glowWhite)" opacity="0.9" />
 </svg>
