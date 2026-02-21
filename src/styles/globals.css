@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -47,92 +47,111 @@
 }
 
 :root {
-    --radius: 0.375rem;
+    --radius: 0.5rem;
     --background: transparent;
-    --foreground: #0F172A;
-    --card: rgba(255, 255, 255, 0.70);
+    --foreground: #0F172A; /* slate-900 */
+    --card: rgba(255, 255, 255, 0.85); /* Slightly more opaque for better contrast */
     --card-foreground: #0F172A;
     --popover: rgba(255, 255, 255, 0.95);
     --popover-foreground: #0F172A;
-    --primary: #16A34A;
+    --primary: #3B82F6; /* blue-500 */
     --primary-foreground: #FFFFFF;
-    --secondary: #F1F5F9;
+    --secondary: #F1F5F9; /* slate-100 */
     --secondary-foreground: #0F172A;
-    --muted: #F1F5F9;
-    --muted-foreground: #475569;
-    --accent: #F1F5F9;
-    --accent-foreground: #0F172A;
-    --destructive: #DC2626;
-    --border: rgba(0, 0, 0, 0.08);
+    --muted: #F8FAFC; /* slate-50 */
+    --muted-foreground: #475569; /* slate-600 */
+    --accent: #EFF6FF; /* blue-50 hover state */
+    --accent-foreground: #1D4ED8; /* blue-700 */
+    --destructive: #EF4444; /* red-500 */
+    --border: rgba(15, 23, 42, 0.08); /* slate-900/8 */
     --input: rgba(255, 255, 255, 0.80);
-    --ring: #16A34A;
-    --chart-1: #22C55E;
+    --ring: rgba(59, 130, 246, 0.3); /* blue-500/30 focus ring */
+    --chart-1: #10B981;
     --chart-2: #3B82F6;
     --chart-3: #F59E0B;
     --chart-4: #8B5CF6;
     --chart-5: #EF4444;
-    --sidebar: rgba(255, 255, 255, 0.75);
+    --sidebar: rgba(255, 255, 255, 0.85);
     --sidebar-foreground: #0F172A;
-    --sidebar-primary: #16A34A;
+    --sidebar-primary: #3B82F6;
     --sidebar-primary-foreground: #FFFFFF;
-    --sidebar-accent: #E2E8F0;
-    --sidebar-accent-foreground: #0F172A;
-    --sidebar-border: #E2E8F0;
-    --sidebar-ring: #16A34A;
+    --sidebar-accent: #EFF6FF;
+    --sidebar-accent-foreground: #1D4ED8;
+    --sidebar-border: rgba(15, 23, 42, 0.08);
+    --sidebar-ring: rgba(59, 130, 246, 0.3);
 }
 
 .dark {
     --background: transparent;
-    --foreground: #F1F5F9;
-    --card: rgba(255, 255, 255, 0.05);
-    --card-foreground: #F1F5F9;
-    --popover: rgba(10, 22, 40, 0.92);
-    --popover-foreground: #F1F5F9;
-    --primary: #06B6D4;
-    --primary-foreground: #0A1628;
-    --secondary: rgba(255, 255, 255, 0.08);
-    --secondary-foreground: #F1F5F9;
-    --muted: rgba(255, 255, 255, 0.05);
-    --muted-foreground: #94A3B8;
-    --accent: rgba(255, 255, 255, 0.08);
-    --accent-foreground: #F1F5F9;
-    --destructive: #F87171;
-    --border: rgba(255, 255, 255, 0.08);
-    --input: rgba(255, 255, 255, 0.10);
-    --ring: #06B6D4;
-    --chart-1: #06B6D4;
+    --foreground: #F8FAFC; /* slate-50 */
+    --card: rgba(30, 41, 59, 0.5); /* slate-800/50 glassy */
+    --card-foreground: #F8FAFC;
+    --popover: rgba(15, 23, 42, 0.95); /* slate-900/95 */
+    --popover-foreground: #F8FAFC;
+    --primary: #3B82F6; /* blue-500 */
+    --primary-foreground: #FFFFFF;
+    --secondary: rgba(51, 65, 85, 0.4); /* slate-700/40 */
+    --secondary-foreground: #F8FAFC;
+    --muted: rgba(30, 41, 59, 0.5); /* slate-800/50 */
+    --muted-foreground: #94A3B8; /* slate-400 */
+    --accent: rgba(59, 130, 246, 0.15); /* blue-500/15 */
+    --accent-foreground: #DBEAFE; /* blue-100 */
+    --destructive: #F87171; /* red-400 */
+    --border: rgba(255, 255, 255, 0.08); /* subtle white border */
+    --input: rgba(255, 255, 255, 0.05); /* very subtle input bg */
+    --ring: rgba(59, 130, 246, 0.4); /* blue-500/40 focus ring */
+    --chart-1: #34D399;
     --chart-2: #60A5FA;
     --chart-3: #FBBF24;
     --chart-4: #A78BFA;
     --chart-5: #F87171;
-    --sidebar: rgba(10, 22, 40, 0.96);
-    --sidebar-foreground: #F1F5F9;
-    --sidebar-primary: #06B6D4;
-    --sidebar-primary-foreground: #0A1628;
-    --sidebar-accent: rgba(255, 255, 255, 0.08);
-    --sidebar-accent-foreground: #F1F5F9;
-    --sidebar-border: rgba(255, 255, 255, 0.06);
-    --sidebar-ring: #06B6D4;
+    --sidebar: rgba(15, 23, 42, 0.7); /* slate-900/70 glass */
+    --sidebar-foreground: #F8FAFC;
+    --sidebar-primary: #3B82F6;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: rgba(59, 130, 246, 0.15);
+    --sidebar-accent-foreground: #DBEAFE;
+    --sidebar-border: rgba(255, 255, 255, 0.08);
+    --sidebar-ring: rgba(59, 130, 246, 0.4);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
   }
   body {
     @apply text-foreground;
-    font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Soft, airy light mode background with very faint blue/gray ambient hues */
     background:
-      radial-gradient(ellipse at 80% 10%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 10% 90%, rgba(148, 163, 184, 0.06) 0%, transparent 50%),
-      linear-gradient(135deg, #F0FDFA 0%, #E0F2FE 50%, #F8FAFC 100%);
+      radial-gradient(100% 100% at 50% 0%, rgba(248, 250, 252, 1) 0%, transparent 100%),
+      radial-gradient(80% 80% at 80% 20%, rgba(226, 232, 240, 0.2) 0%, transparent 100%),
+      linear-gradient(180deg, rgba(241, 245, 249, 1) 0%, rgba(248, 250, 252, 1) 100%);
     background-attachment: fixed;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   .dark body {
+    /* Linear-inspired dark mode: deep slate/black with subtle glow */
     background:
-      radial-gradient(ellipse at 80% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
-      radial-gradient(ellipse at 10% 90%, rgba(71, 85, 105, 0.08) 0%, transparent 50%),
-      linear-gradient(135deg, #0A1628 0%, #0D2B2B 50%, #0A1A1A 100%);
+      radial-gradient(40% 60% at 50% -10%, rgba(56, 189, 248, 0.05) 0%, transparent 100%),
+      radial-gradient(100% 100% at 50% 0%, rgba(15, 23, 42, 0.6) 0%, transparent 100%),
+      linear-gradient(180deg, #020617 0%, #0F172A 100%);
+    background-color: #020617; /* Very deep slate (almost black) */
     background-attachment: fixed;
   }
+  
+  /* Apply monospace font for code blocks if they exist eventually */
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Base interactive utilities */
+@utility glass-card {
+  @apply bg-card backdrop-blur-md border border-border shadow-sm;
+}
+@utility glass-card-hover {
+  @apply glass-card transition-all duration-300 ease-out hover:shadow-md hover:bg-card/90 hover:border-border/80 hover:-translate-y-[1px];
 }

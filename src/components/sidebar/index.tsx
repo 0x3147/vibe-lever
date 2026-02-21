@@ -64,26 +64,24 @@ export function Sidebar() {
   };
 
   return (
-    <div className={`flex flex-col shrink-0 m-2 rounded-xl shadow-xl bg-sidebar backdrop-blur-md border border-border overflow-hidden transition-[width] duration-200 ${collapsed ? "w-14" : "w-56"}`}>
+    <div className={`flex flex-col shrink-0 m-3 rounded-2xl shadow-sm bg-sidebar/80 backdrop-blur-xl border border-border/60 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${collapsed ? "w-16" : "w-64"}`}>
       {/* Tool selector */}
-      {!collapsed && (
-        <div className="p-3">
-          <Select value={currentTool} onValueChange={handleToolChange}>
-            <SelectTrigger className="w-full h-8 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="claude-code">Claude Code</SelectItem>
-              <SelectItem value="codex">Codex</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
+      <div className={`p-4 transition-all duration-300 ${collapsed ? "opacity-0 h-0 p-0 overflow-hidden" : "opacity-100"}`}>
+        <Select value={currentTool} onValueChange={handleToolChange}>
+          <SelectTrigger className="w-full h-9 text-sm shadow-none focus:ring-0 focus:ring-offset-0 border-border/50 bg-background/50 hover:bg-background/80 transition-colors">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="shadow-lg border-border/50 backdrop-blur-xl bg-popover/90">
+            <SelectItem value="claude-code" className="cursor-pointer">Claude Code</SelectItem>
+            <SelectItem value="codex" className="cursor-pointer">Codex</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-      {!collapsed && <Separator />}
+      {!collapsed && <Separator className="opacity-50 mx-4 w-auto" />}
 
       {/* Menu items */}
-      <nav className="flex-1 p-2 space-y-0.5">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto no-scrollbar">
         {menus.map((item) => {
           const isActive = currentPath === item.path || currentPath.startsWith(item.path + "/");
           return (
@@ -91,57 +89,59 @@ export function Sidebar() {
               key={item.key}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               to={item.path as any}
-              className={`flex items-center py-2 rounded-md text-sm transition-colors ${collapsed ? "justify-center px-0" : "gap-2.5 px-3"} ${
+              className={`flex items-center py-2.5 rounded-xl text-sm transition-all duration-200 cursor-pointer ${collapsed ? "justify-center px-0 h-10 w-10 mx-auto" : "gap-3 px-3"} ${
                 isActive
-                  ? "bg-primary/15 text-primary font-medium"
-                  : "text-muted-foreground hover:bg-primary/8 hover:text-foreground"
+                  ? "bg-primary/5 text-foreground font-medium shadow-[inset_2px_0_0_0_var(--color-primary)] dark:shadow-[inset_2px_0_0_0_#FAFAFA] bg-gradient-to-r from-primary/10 to-transparent"
+                  : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
               }`}
             >
-              <FontAwesomeIcon icon={item.icon} className="w-3.5 h-3.5 shrink-0" />
-              {!collapsed && t(item.label)}
+              <FontAwesomeIcon icon={item.icon} className={`shrink-0 transition-transform duration-200 ${isActive ? "scale-110" : ""} ${collapsed ? "w-4 h-4" : "w-4 h-4"}`} />
+              {!collapsed && <span className="truncate">{t(item.label)}</span>}
             </Link>
           );
         })}
       </nav>
 
-      <Separator />
+      <Separator className="opacity-50 mx-2 w-auto" />
 
       {/* Bottom actions */}
-      <div className="p-2 space-y-0.5">
+      <div className="p-3 space-y-1">
         <Link
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           to={"/settings" as any}
-          className={`flex items-center py-2 rounded-md text-sm transition-colors ${collapsed ? "justify-center px-0" : "gap-2.5 px-3"} ${
+          className={`group flex items-center py-2.5 rounded-xl text-sm transition-all duration-200 cursor-pointer ${collapsed ? "justify-center px-0 h-10 w-10 mx-auto" : "gap-3 px-3"} ${
             currentPath === "/settings"
-              ? "bg-primary/15 text-primary font-medium"
-              : "text-muted-foreground hover:bg-primary/8 hover:text-foreground"
+              ? "bg-primary/5 text-foreground font-medium shadow-[inset_2px_0_0_0_var(--color-primary)] bg-gradient-to-r from-primary/10 to-transparent"
+              : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
           }`}
         >
-          <FontAwesomeIcon icon={faCog} className="w-3.5 h-3.5 shrink-0" />
-          {!collapsed && t("sidebar.settings")}
+          <FontAwesomeIcon icon={faCog} className={`shrink-0 transition-transform duration-300 group-hover:rotate-45 ${currentPath === "/settings" ? "scale-110" : ""} ${collapsed ? "w-4 h-4" : "w-4 h-4"}`} />
+          {!collapsed && <span>{t("sidebar.settings")}</span>}
         </Link>
+        
         {!collapsed && (
           <button
             onClick={toggleLanguage}
-            className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-all duration-200 cursor-pointer"
           >
-            {language === "zh" ? "EN" : "中文"}
+            <span className="flex items-center justify-center w-4 h-4 rounded-sm bg-muted/50 border border-border/50">
+              {language === "zh" ? "文" : "A"}
+            </span>
+            {language === "zh" ? "English" : "简体中文"}
           </button>
         )}
+        
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full flex items-center justify-center py-1.5 rounded-md text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
+          className={`w-full flex items-center justify-center py-2.5 rounded-xl text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-all duration-200 cursor-pointer ${collapsed ? "h-10 w-10 mx-auto" : "mt-2"}`}
           aria-label={collapsed ? "展开" : "收起"}
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            {collapsed ? (
-              <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            ) : (
-              <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            )}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={`transition-transform duration-300 ${collapsed ? "rotate-180" : ""}`}>
+            <path d="M10 4L6 8l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </div>
     </div>
   );
 }
+

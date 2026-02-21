@@ -31,19 +31,32 @@ export function McpServersPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out fill-mode-both">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold">{t("mcp.title")}</h2>
-        <Button size="sm" onClick={() => setDialogOpen(true)}>
-          <FontAwesomeIcon icon={faPlus} className="mr-1.5 text-xs" />
+        <h2 className="text-xl font-semibold tracking-tight">{t("mcp.title")}</h2>
+        <Button size="sm" onClick={() => setDialogOpen(true)} className="rounded-full px-4 font-medium transition-transform hover:scale-105 active:scale-95">
+          <FontAwesomeIcon icon={faPlus} className="mr-2 text-xs" />
           {t("mcp.add")}
         </Button>
       </div>
       {servers.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{t("mcp.noServers")}</p>
+        <div className="flex flex-col items-center justify-center py-12 text-center animate-in fade-in zoom-in-95 duration-500 delay-100 fill-mode-both">
+          <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+            <FontAwesomeIcon icon={faPlus} className="text-muted-foreground/50 text-xl" />
+          </div>
+          <p className="text-sm text-muted-foreground">{t("mcp.noServers")}</p>
+        </div>
       ) : (
-        <div className="space-y-2">
-          {servers.map((s) => <McpServerCard key={s.name} server={s} onDelete={handleDelete} />)}
+        <div className="space-y-3">
+          {servers.map((s, index) => (
+            <div 
+              key={s.name}
+              className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
+              style={{ animationDuration: '500ms', animationDelay: `${75 * index}ms` }}
+            >
+              <McpServerCard server={s} onDelete={handleDelete} />
+            </div>
+          ))}
         </div>
       )}
       <McpFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSubmit={handleAdd} />

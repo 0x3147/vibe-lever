@@ -16,28 +16,30 @@ export function VendorCard({ vendor, onEdit, onDelete, onActivate }: Props) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-card hover:bg-accent/20 transition-colors">
-      <div className="flex items-center gap-3 min-w-0">
+    <div className="flex items-center justify-between p-4 rounded-xl glass-card-hover group">
+      <div className="flex items-center gap-4 min-w-0">
         <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium truncate">{vendor.name}</span>
+          <div className="flex items-center gap-2.5 mb-1">
+            <span className="text-sm font-semibold truncate tracking-tight">{vendor.name}</span>
             {vendor.is_active && (
-              <Badge variant="default" className="text-xs shrink-0">{t("common.active")}</Badge>
+              <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 bg-primary/20 text-primary hover:bg-primary/30 border-none shrink-0 rounded-sm">
+                {t("common.active")}
+              </Badge>
             )}
           </div>
-          <p className="text-xs text-muted-foreground truncate">{vendor.base_url}</p>
+          <p className="text-xs text-muted-foreground/80 truncate font-mono">{vendor.base_url}</p>
         </div>
       </div>
-      <div className="flex items-center gap-1 shrink-0 ml-2">
+      <div className="flex items-center gap-1.5 shrink-0 ml-4 opacity-70 group-hover:opacity-100 transition-opacity">
         {!vendor.is_active && (
-          <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => onActivate(vendor.id)}>
+          <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => onActivate(vendor.id)}>
             <FontAwesomeIcon icon={faBolt} className="text-xs" />
           </Button>
         )}
-        <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => onEdit(vendor)}>
+        <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg hover:bg-accent hover:text-foreground transition-colors" onClick={() => onEdit(vendor)}>
           <FontAwesomeIcon icon={faPen} className="text-xs" />
         </Button>
-        <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive hover:text-destructive" onClick={() => onDelete(vendor.id)}>
+        <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors" onClick={() => onDelete(vendor.id)}>
           <FontAwesomeIcon icon={faTrash} className="text-xs" />
         </Button>
       </div>

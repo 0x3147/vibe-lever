@@ -42,29 +42,42 @@ export function VendorsPage({ tool }: Props) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out fill-mode-both">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold">{t("vendors.title")}</h2>
-        <Button size="sm" onClick={handleAdd}>
-          <FontAwesomeIcon icon={faPlus} className="mr-1.5 text-xs" />
+        <h2 className="text-xl font-semibold tracking-tight">{t("vendors.title")}</h2>
+        <Button size="sm" onClick={handleAdd} className="rounded-full px-4 font-medium transition-transform hover:scale-105 active:scale-95">
+          <FontAwesomeIcon icon={faPlus} className="mr-2 text-xs" />
           {t("vendors.add")}
         </Button>
       </div>
 
       {loading ? (
-        <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+        <div className="animate-pulse space-y-4">
+          <div className="h-20 bg-muted/50 rounded-xl"></div>
+          <div className="h-20 bg-muted/50 rounded-xl w-4/5"></div>
+        </div>
       ) : vendors.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{t("vendors.noVendors")}</p>
+        <div className="flex flex-col items-center justify-center py-12 text-center animate-in fade-in zoom-in-95 duration-500 delay-100 fill-mode-both">
+          <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+            <FontAwesomeIcon icon={faPlus} className="text-muted-foreground/50 text-xl" />
+          </div>
+          <p className="text-sm text-muted-foreground">{t("vendors.noVendors")}</p>
+        </div>
       ) : (
-        <div className="space-y-2">
-          {vendors.map((v) => (
-            <VendorCard
-              key={v.id}
-              vendor={v}
-              onEdit={handleEdit}
-              onDelete={(id) => deleteVendor(id)}
-              onActivate={(id) => activateVendor(tool, id)}
-            />
+        <div className="space-y-3">
+          {vendors.map((v, index) => (
+            <div 
+              key={v.id} 
+              className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
+              style={{ animationDuration: '500ms', animationDelay: `${75 * index}ms` }}
+            >
+              <VendorCard
+                vendor={v}
+                onEdit={handleEdit}
+                onDelete={(id) => deleteVendor(id)}
+                onActivate={(id) => activateVendor(tool, id)}
+              />
+            </div>
           ))}
         </div>
       )}
