@@ -103,6 +103,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
 
   const activePreset = PRESETS.find(p => p.vendor_key === selectedPreset);
   const activePromoUrl = activePreset?.base_urls?.find(u => u.value === selectedUrl)?.promo_url ?? activePreset?.promo_url;
+  const activePromoText = activePreset?.base_urls?.find(u => u.value === selectedUrl)?.promo_text ?? activePreset?.promo_text ?? `即刻获取 ${activePreset?.name || ''} Coding 特惠套餐 🔥`;
   const isDisabled = loading || (
     !editing && tab === "preset" ? (!selectedPreset || !token) : (!custom.name || !custom.base_url || !custom.token)
   );
@@ -236,7 +237,7 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                   ) : activePromoUrl && (
                     <button type="button" onClick={() => openUrl(activePromoUrl)}
                       className="flex items-center justify-between px-3 py-2 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors group w-full">
-                      <span className="text-xs font-medium text-primary">即刻获取 {activePreset!.name} Coding 特惠套餐 🔥</span>
+                      <span className="text-xs font-medium text-primary">{activePromoText}</span>
                       <span className="text-primary text-xs group-hover:translate-x-0.5 transition-transform">→</span>
                     </button>
                   )}

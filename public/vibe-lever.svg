@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Background Gradient: Deep Slate to Black -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    
+    <!-- Primary Blue Gradient for Terminal Prompt & Active Track -->
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+
+    <!-- Emerald/Cyan Gradient for AI Spark -->
+    <linearGradient id="sparkGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- White Glow Filter -->
+    <filter id="glowWhite" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Blue Glow Filter -->
+    <filter id="glowBlue" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Spark Glow Filter -->
+    <filter id="glowSpark" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <!-- Drop Shadow for Terminal Window -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+    
+    <!-- Inner Shadow for Toggle Knob -->
+    <filter id="innerShadowKnob">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Outline / Base App Icon -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <!-- Glassy Border -->
+  <rect width="510" height="510" x="1" y="1" rx="112" fill="none" stroke="#334155" stroke-width="2" opacity="0.8" />
+
+  <!-- Terminal/Code Window -->
+  <rect x="80" y="128" width="352" height="256" rx="24" fill="#0F172A" filter="url(#dropShadow)" stroke="#1E293B" stroke-width="4" />
+  
+  <!-- Terminal Header Traffic Lights -->
+  <circle cx="116" cy="160" r="7" fill="#EF4444" opacity="0.9" />
+  <circle cx="140" cy="160" r="7" fill="#F59E0B" opacity="0.9" />
+  <circle cx="164" cy="160" r="7" fill="#10B981" opacity="0.9" />
+  
+  <line x1="82" y1="184" x2="430" y2="184" stroke="#1E293B" stroke-width="2" />
+
+  <!-- Terminal Code Arrow: > -->
+  <path d="M 128 236 L 180 276 L 128 316" fill="none" stroke="url(#blueGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" filter="url(#glowBlue)" />
+
+  <!-- The "Config Slider" representing the Lever / Control aspect -->
+  <!-- Inactive Track -->
+  <rect x="220" y="296" width="160" height="16" rx="8" fill="#1E293B" />
+  <!-- Active Track -->
+  <rect x="220" y="296" width="96" height="16" rx="8" fill="url(#blueGrad)" filter="url(#glowBlue)" opacity="0.8" />
+  <rect x="220" y="296" width="96" height="16" rx="8" fill="url(#blueGrad)" />
+  
+  <!-- Slider Knob -->
+  <circle cx="316" cy="304" r="22" fill="#FFFFFF" filter="url(#innerShadowKnob)" />
+  <circle cx="316" cy="304" r="8" fill="url(#blueGrad)" />
+
+  <!-- The AI Sparks emerging from the terminal (representing the AI injection/models) -->
+  <!-- Central Main Spark -->
+  <path d="M 330 230 Q 330 190 370 190 Q 330 190 330 150 Q 330 190 290 190 Q 330 190 330 230 Z" fill="url(#sparkGrad)" filter="url(#glowSpark)" />
+  
+  <!-- Secondary Spark -->
+  <path d="M 260 250 Q 260 230 280 230 Q 260 230 260 210 Q 260 230 240 230 Q 260 230 260 250 Z" fill="#60A5FA" filter="url(#glowWhite)" opacity="0.9" />
+</svg>

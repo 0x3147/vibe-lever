@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useToolStore } from "@/stores/use-tool-store";
-import { useSettingsStore } from "@/stores/use-settings-store";
 import type { ToolId } from "@/types/tool";
 
 interface MenuItem {
@@ -44,7 +43,6 @@ const TOOL_MENUS: Record<ToolId, MenuItem[]> = {
 export function Sidebar() {
   const { t } = useTranslation();
   const { currentTool, setCurrentTool } = useToolStore();
-  const { setLanguage, language } = useSettingsStore();
   const routerState = useRouterState();
   const navigate = useNavigate();
   const currentPath = routerState.location.pathname;
@@ -57,10 +55,6 @@ export function Sidebar() {
     setCurrentTool(id);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     navigate({ to: TOOL_MENUS[id][0].path as any });
-  };
-
-  const toggleLanguage = () => {
-    setLanguage(language === "zh" ? "en" : "zh");
   };
 
   return (
@@ -118,19 +112,7 @@ export function Sidebar() {
           <FontAwesomeIcon icon={faCog} className={`shrink-0 transition-transform duration-300 group-hover:rotate-45 ${currentPath === "/settings" ? "scale-110" : ""} ${collapsed ? "w-4 h-4" : "w-4 h-4"}`} />
           {!collapsed && <span>{t("sidebar.settings")}</span>}
         </Link>
-        
-        {!collapsed && (
-          <button
-            onClick={toggleLanguage}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-all duration-200 cursor-pointer"
-          >
-            <span className="flex items-center justify-center w-4 h-4 rounded-sm bg-muted/50 border border-border/50">
-              {language === "zh" ? "文" : "A"}
-            </span>
-            {language === "zh" ? "English" : "简体中文"}
-          </button>
-        )}
-        
+
         <button
           onClick={() => setCollapsed(!collapsed)}
           className={`w-full flex items-center justify-center py-2.5 rounded-xl text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-all duration-200 cursor-pointer ${collapsed ? "h-10 w-10 mx-auto" : "mt-2"}`}

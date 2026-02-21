@@ -17,6 +17,7 @@ export type Preset = PresetVendor & {
   models: string[];
   modelLabels?: Record<string, string>;
   promo_url?: string;
+  promo_text?: string;
   promo_links?: { label: string; url: string }[];
   hot?: boolean;
   dark_invert?: boolean;
@@ -25,7 +26,7 @@ export type Preset = PresetVendor & {
   codex_model?: string;
   codex_models?: string[];
   codex_logo?: string;
-  base_urls?: { label: string; value: string; promo_url?: string }[];
+  base_urls?: { label: string; value: string; promo_url?: string; promo_text?: string }[];
   model_groups?: { label: string; value: string; models: string[] }[];
 };
 
@@ -40,8 +41,8 @@ export const PRESETS: Preset[] = [
       { label: "极致", value: "opus",  models: ["glm-5"] },
     ],
     base_urls: [
-      { label: "国内站", value: "https://open.bigmodel.cn/api/anthropic", promo_url: "https://open.bigmodel.cn/glm-coding" },
-      { label: "国际站", value: "https://api.z.ai/api/anthropic",         promo_url: "https://z.ai/subscribe?code=authcode_LavTZVCdFsWZ_Y71m5rTu5rXMWrkMS5WSszmJS3rDug&state=5b3494be506566b6b1aa1d3401f1d919" },
+      { label: "国内站", value: "https://open.bigmodel.cn/api/anthropic", promo_url: "https://open.bigmodel.cn/glm-coding", promo_text: "🚀 解锁智谱 GLM 旗舰能力，领取开发者专属特惠" },
+      { label: "国际站", value: "https://api.z.ai/api/anthropic",         promo_url: "https://z.ai/subscribe?code=authcode_LavTZVCdFsWZ_Y71m5rTu5rXMWrkMS5WSszmJS3rDug&state=5b3494be506566b6b1aa1d3401f1d919", promo_text: "🌍 前往国际站体验无界 AI，新用户即享更多额度" },
     ],
   },
   {
@@ -49,6 +50,7 @@ export const PRESETS: Preset[] = [
     base_url: "https://api.kimi.com/coding/", model: "kimi-for-coding",
     models: ["kimi-for-coding"],
     promo_url: "https://www.kimi.com/code?from=membership&track_id=297b4590-ab61-4327-8d36-c0ab90d24f40",
+    promo_text: "🌙 体验 Kimi 超长文本处理，点击获取编程专属折扣",
   },
   {
     name: "DeepSeek", vendor_key: "deepseek", logo: deepseekLogo,
@@ -71,6 +73,7 @@ export const PRESETS: Preset[] = [
       { label: "极致", value: "opus",   models: ["qwen3-max-2026-01-23", "kimi-k2.5"] },
     ],
     promo_url: "https://www.aliyun.com/benefit/scene/coding?spm=5176.42028462.nav-v2-dropdown-menu-3.d_main_4_3.5421154a9GKjn0&scm=20140722.M_10964013._.V_1&tid=J_001",
+    promo_text: "☁️ 阿里云百炼大模型平台，开发者专属福利大放送",
   },
   {
     name: "OpenAI", vendor_key: "openai", logo: openaiLogo, dark_invert: true,
@@ -103,6 +106,7 @@ export const PRESETS: Preset[] = [
     base_url: "https://api.minimaxi.com/anthropic", model: "MiniMax-M2.5",
     models: ["MiniMax-M2.5"],
     promo_url: "https://platform.minimaxi.com/subscribe/coding-plan",
+    promo_text: "✨ 探索 MiniMax 极致效率，点击获取尊享订阅特权",
   },
   {
     name: "Gemini", vendor_key: "gemini", logo: geminiLogo,
@@ -124,6 +128,7 @@ export const PRESETS: Preset[] = [
       { label: "极致", value: "opus",   models: ["kimi-k2-thinking", "kimi-k2.5"] },
     ],
     promo_url: "https://www.volcengine.com/activity/codingplan",
+    promo_text: "🌋 体验火山模型推理，开启开发者限时优惠",
   },
   {
     name: "ZenMux", vendor_key: "zenmux", logo: zenmuxLogo, dark_invert: true,
