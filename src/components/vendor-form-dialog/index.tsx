@@ -24,6 +24,8 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [selectedUrl, setSelectedUrl] = useState<string>("");
+  const [selectedTier, setSelectedTier] = useState<string | null>(null);
+  const [tierModels, setTierModels] = useState<Record<string, string>>({});
   const [token, setToken] = useState("");
   const [custom, setCustom] = useState<VendorInput>(EMPTY);
   const [loading, setLoading] = useState(false);
@@ -41,6 +43,8 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
         setSelectedPreset(null);
         setSelectedModel("");
         setSelectedUrl("");
+        setSelectedTier(null);
+        setTierModels({});
         setToken("");
         setCustom(EMPTY);
       }
@@ -49,12 +53,21 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
 
   const handleSelectPreset = (key: string) => {
     if (selectedPreset === key) {
-      setSelectedPreset(null);
-      setSelectedModel("");
+        setSelectedPreset(null);
+        setSelectedModel("");
+        setSelectedTier(null);
+        setTierModels({});
     } else {
       const p = PRESETS.find(p => p.vendor_key === key)!;
       setSelectedPreset(key);
-      setSelectedModel(tool === "codex" && p.codex_model ? p.codex_model : p.model);
+      if (p.model_groups?.length) {
+        const defaultGroup = p.model_groups[1] ?? p.model_groups[0];
+        setSelectedTier(defaultGroup.value);
+        setSelectedModel(defaultGroup.models[0]);
+      } else {
+        setSelectedTier(null);
+        setSelectedModel(tool === "codex" && p.codex_model ? p.codex_model : p.model);
+      }
       setSelectedUrl(tool === "codex" && p.codex_base_url ? p.codex_base_url : p.base_urls ? p.base_urls[0].value : "");
     }
   };
@@ -139,7 +152,33 @@ export function VendorFormDialog({ open, tool, editing, onClose, onSubmit }: Pro
                       <Input className="h-8 text-xs text-muted-foreground bg-muted/30" value={activePreset.base_url} readOnly />
                     )}
                   </div>
-                  {(() => { const ms = tool === "codex" && activePreset.codex_models ? activePreset.codex_models : activePreset.models; return ms.length > 0 && (
+                  {activePreset.model_groups ? (
+                    <div className="space-y-1">
+                      <Label className="text-xs">{t("common.model")}</Label>
+                      <div className="flex gap-1">
+                        {activePreset.model_groups.map(g => (
+                          <button key={g.value} type="button"
+                            onClick={() => { const m = tierModels[g.value] ?? g.models[0]; setSelectedTier(g.value); setSelectedModel(m); }}
+                            className={`flex-1 py-1.5 text-xs font-medium rounded-md border transition-colors ${
+                              selectedTier === g.value ? "bg-primary/10 border-primary text-primary" : "border-border/60 text-muted-foreground hover:border-primary/50"
+                            }`}>
+                            {g.label}
+                          </button>
+                        ))}
+                      </div>
+                      {selectedTier && (() => {
+                        const grp = activePreset.model_groups!.find(g => g.value === selectedTier);
+                        return grp && (
+                          <Select value={selectedModel} onValueChange={m => { setSelectedModel(m); setTierModels(prev => ({ ...prev, [selectedTier!]: m })); }}>
+                            <SelectTrigger className="h-8 text-sm"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              {grp.models.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                        );
+                      })()}
+                    </div>
+                  ) : (() => { const ms = tool === "codex" && activePreset.codex_models ? activePreset.codex_models : activePreset.models; return ms.length > 0 && (
                   <div className="space-y-1">
                     <Label className="text-xs">{t("common.model")}</Label>
                     <Select value={selectedModel} onValueChange={setSelectedModel}>
